@@ -1,0 +1,1663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comercios abiertos en Paiporta</title>
+    <meta name="description" content="Descubre los comercios que han reabierto sus puertas en Paiporta tras la DANA. Apoya la recuperación comercial de nuestro pueblo.">
+    <meta name="keywords" content="Paiporta, comercios, DANA, Valencia, negocios, reapertura">
+    <meta name="author" content="Comunidad de Paiporta">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="assets/img/favicon.ico">
+    
+    <!-- Open Graph -->
+    <meta property="og:title" content="Comercios Abiertos en Paiporta">
+    <meta property="og:description" content="Descubre los comercios que han reabierto sus puertas en Paiporta tras la DANA">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://comercios-paiporta.es">
+    
+
+    
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            --primary-solid: #1e40af;
+            --background: #fefefe;
+            --surface: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --space-lg: 1rem;
+            --space-xl: 1.5rem;
+            --space-2xl: 2rem;
+            --font-primary: 'Inter', sans-serif;
+            --font-display: 'Poppins', sans-serif;
+        }
+
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+
+        /* Contenedores */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        /* Enlace para añadir local en header */
+        .header-add-link {
+            margin-top: var(--space-xl);
+        }
+
+        .add-business-link {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50px;
+            padding: 0.75rem 1.5rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .add-business-link:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .link-icon {
+            font-size: 1.1rem;
+        }
+
+        .link-text {
+            font-weight: 600;
+        }
+
+        .link-arrow {
+            font-size: 1.2rem;
+            transition: transform 0.3s ease;
+        }
+
+        .add-business-link:hover .link-arrow {
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 768px) {
+            .add-business-link {
+                padding: 1rem 1.5rem;
+                font-size: 1rem;
+                flex-direction: column;
+                gap: var(--space-xs);
+                text-align: center;
+            }
+            
+            .link-text {
+                font-size: 0.9rem;
+            }
+        }
+
+        /* Banner integrado en header */
+        .header-banner {
+            margin-top: var(--space-xl);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(var(--blur));
+            border-radius: var(--border-radius);
+            border: 1px solid var(--glass-border);
+            overflow: hidden;
+        }
+
+        .banner-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: var(--space-lg);
+            gap: var(--space-lg);
+        }
+
+        .banner-text {
+            flex: 1;
+        }
+
+        .banner-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: var(--space-xs);
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+        }
+
+        .banner-subtitle {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .banner-button {
+            background: #ffffff;
+            color: #1e40af;
+            padding: 1rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            text-shadow: none;
+        }
+
+        .banner-button:hover {
+            background: #f8fafc;
+            color: #1e3a8a;
+            transform: translateX(3px) translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+            border-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .banner-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .banner-button:hover .banner-arrow {
+            transform: translateX(3px);
+        }
+
+        @media (max-width: 768px) {
+            .banner-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .banner-button {
+                padding: 1.25rem 2.5rem;
+                font-size: 1.1rem;
+                font-weight: 700;
+            }
+        }
+
+        /* Barra de progreso */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 3px;
+            background: var(--accent);
+            z-index: 9999;
+            transition: width 0.3s ease;
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding: var(--space-2xl) 0;
+        }
+
+        /* Búsqueda */
+        .search-section {
+            padding: var(--space-xl);
+            margin-bottom: var(--space-lg);
+            text-align: center;
+        }
+
+        /* Filtros */
+        .filters-section {
+            padding: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .filters-container {
+            display: flex;
+            gap: var(--space-sm);
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-chip {
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 2px solid var(--border);
+            background: white;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-chip:hover {
+            border-color: var(--primary-solid);
+            color: var(--primary-solid);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Hover effects for category filters */
+        .filter-chip.alimentacion:hover {
+            border-color: #10b981;
+            color: #10b981;
+            background: rgba(16, 185, 129, 0.1);
+        }
+
+        .filter-chip.animales:hover {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .filter-chip.bares:hover {
+            border-color: #f59e0b;
+            color: #f59e0b;
+            background: rgba(245, 158, 11, 0.1);
+        }
+
+        .filter-chip.restauracion:hover {
+            border-color: #ef4444;
+            color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+
+        .filter-chip.servicios:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-chip.agrupaciones:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .filter-chip.hosteleria:hover {
+            border-color: #ec4899;
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        .filter-chip.ocio:hover {
+            border-color: #84cc16;
+            color: #84cc16;
+            background: rgba(132, 204, 22, 0.1);
+        }
+
+        .filter-chip.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary-solid);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        /* Búsqueda */
+        .search-container {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border);
+            border-radius: 50px;
+            font-size: 1.1rem;
+            transition: var(--transition);
+            background: white;
+            text-align: center;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-solid);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+            transform: scale(1.02);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--border-radius-sm);
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .search-suggestions.show {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border-bottom: 1px solid var(--border-light);
+            transition: var(--transition-fast);
+        }
+
+        .suggestion-item:hover {
+            background: var(--background);
+        }
+
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+
+        .suggestion-category {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 0.25rem;
+        }
+
+        /* Estadísticas rápidas */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .stat-card {
+            background: var(--surface);
+            backdrop-filter: blur(var(--blur));
+            border-radius: var(--border-radius);
+            padding: var(--space-lg);
+            text-align: center;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border);
+            transition: var(--transition);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-solid);
+            margin-bottom: var(--space-xs);
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        /* Grid de comercios */
+        .businesses-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .business-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .business-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+            border-color: rgba(0, 0, 0, 0.1);
+        }
+
+        .business-image-container {
+            position: relative;
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+        }
+
+        .business-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .business-card:hover .business-image {
+            transform: scale(1.05);
+        }
+
+        .image-placeholder {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 50%, #cbd5e1 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 3rem;
+            position: relative;
+        }
+
+        .image-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23cbd5e1' fill-opacity='0.3'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        .category-badge {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .business-card:hover .category-badge {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        .business-content {
+            padding: 1.5rem;
+        }
+
+
+
+        .business-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+            line-height: 1.3;
+        }
+
+        .business-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-inverse);
+            background: var(--category-default);
+        }
+
+
+
+        .business-address {
+            color: #3b82f6;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+            position: relative;
+            text-decoration: underline;
+            text-decoration-color: rgba(59, 130, 246, 0.3);
+            text-underline-offset: 2px;
+        }
+
+        .business-address:hover {
+            color: #1d4ed8;
+            text-decoration-color: rgba(29, 78, 216, 0.6);
+            transform: translateY(-1px);
+        }
+
+
+
+        .business-address:hover {
+            color: var(--primary-solid);
+        }
+
+        .business-description {
+            color: #6b7280;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            margin-bottom: 1rem;
+            font-weight: 400;
+        }
+
+        .business-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .business-detail {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+            font-weight: 400;
+        }
+
+        .business-detail strong {
+            color: #374151;
+            font-weight: 600;
+        }
+
+        .reopen-date {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+            margin-top: 0.5rem;
+        }
+
+        .reopen-date::before {
+            content: "🎉";
+            font-size: 1rem;
+        }
+
+        .business-actions {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: var(--border-radius-sm);
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: var(--text-inverse);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background);
+            border-color: var(--primary-solid);
+            color: var(--primary-solid);
+        }
+
+        /* Estado vacío */
+        .empty-state {
+            text-align: center;
+            padding: var(--space-2xl);
+            display: none;
+        }
+
+        .empty-state.show {
+            display: block;
+        }
+
+        .empty-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-lg);
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+            color: var(--text-secondary);
+        }
+
+        .empty-description {
+            color: var(--text-muted);
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+
+
+
+
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: var(--space-xl) 0;
+            margin-top: var(--space-xl);
+        }
+
+        /* Modal para agregar local */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 10000;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 1;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.9);
+            transition: transform 0.3s ease;
+        }
+
+        .modal-overlay.show .modal {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-secondary);
+            padding: 0.5rem;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--background);
+            color: var(--text-primary);
+        }
+
+        .modal-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+        }
+
+        .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-solid);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: flex-end;
+        }
+
+        .btn-modal {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background);
+            border-color: var(--primary-solid);
+            color: var(--primary-solid);
+        }
+
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+            color: var(--success);
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .modal {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+        }
+
+        /* Enhanced Mobile Experience */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .header {
+                padding: var(--space-xl) 0;
+                margin-bottom: var(--space-xl);
+            }
+            
+            .businesses-grid {
+                grid-template-columns: 1fr;
+                gap: var(--space-lg);
+            }
+            
+            .navigation-menu {
+                flex-direction: column;
+                gap: var(--space-sm);
+            }
+            
+            .quick-stats {
+                flex-direction: column;
+                gap: var(--space-md);
+                align-items: center;
+            }
+
+            .fab {
+                bottom: 3px;
+                left: var(--space-lg);
+                width: 48px;
+                height: 48px;
+                font-size: 1.3rem;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+        }
+
+        /* Page Transition */
+        .page-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .page-transition.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+    
+    <div class="header">
+        <div class="container">
+            <h1>Comercios abiertos en Paiporta</h1>
+            <p class="header-subtitle">Descubre los negocios que vuelven a reabrir sus puertas tras la DANA</p>
+            
+            <!-- Enlace para añadir local -->
+            <div class="header-add-link">
+                <a href="#" class="add-business-link" onclick="openAddBusinessModal(); return false;">
+                    <span class="link-icon">🏪</span>
+                    <span class="link-text">¿Tienes un local en Paiporta?</span>
+                    
+                </a>
+            </div>
+        </div>
+    </div>
+
+            <main class="main-content page-transition">
+            <div class="container">
+                <!-- Búsqueda -->
+                <section class="search-section">
+                    <div class="search-container">
+                        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar comercios por nombre, dirección o categoría...">
+                        <div id="searchSuggestions" class="search-suggestions"></div>
+                    </div>
+                </section>
+
+                <!-- Filtros por categoría -->
+                <section class="filters-section">
+                    <div class="filters-container" id="filtersContainer">
+                        <!-- Los filtros se generan dinámicamente -->
+                    </div>
+                </section>
+
+            <!-- Grid de comercios -->
+            <section class="businesses-grid" id="businessGrid">
+                <!-- Las tarjetas se generan dinámicamente -->
+            </section>
+
+            <!-- Estado vacío -->
+            <div class="empty-state" id="emptyState">
+                <div class="empty-icon">🏪</div>
+                <h3 class="empty-title">No se encontraron comercios</h3>
+                <p class="empty-description">Intenta ajustar los filtros o la búsqueda para encontrar más comercios.</p>
+            </div>
+        </div>
+    </main>
+
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>Apoya el comercio local · Solo el pueblo salva al pueblo</p>
+        </div>
+    </div>
+
+    <!-- Modal para agregar local -->
+    <div class="modal-overlay" id="addBusinessModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">🏪 Agregar mi local</h3>
+                <button class="modal-close" onclick="closeAddBusinessModal()">×</button>
+            </div>
+            
+            <form class="modal-form" id="addBusinessForm">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label class="form-label">Nombre del negocio *</label>
+                        <input type="text" class="form-input" name="nombre" required placeholder="Ej: Panadería El Horno">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Tipo de negocio *</label>
+                        <select class="form-select" name="tipo" required>
+                            <option value="">Selecciona categoría</option>
+                            <option value="alimentacion">Alimentación</option>
+                            <option value="bares">Bares</option>
+                            <option value="restauracion">Restauración</option>
+                            <option value="servicios">Servicios</option>
+                            <option value="animales">Animales</option>
+                            <option value="agrupaciones">Agrupaciones comerciales</option>
+                            <option value="hosteleria">Hostelería y turismo</option>
+                            <option value="ocio">Ocio, deporte y aficiones</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-field">
+                    <label class="form-label">Dirección *</label>
+                    <input type="text" class="form-input" name="direccion" required placeholder="Ej: Calle Mayor, 1, Paiporta">
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-field">
+                        <label class="form-label">Teléfono *</label>
+                        <input type="tel" class="form-input" name="telefono" required placeholder="+34 123 456 789">
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Horario</label>
+                        <input type="text" class="form-input" name="horario" placeholder="Ej: L-V 9:00-18:00">
+                    </div>
+                </div>
+                
+                <div class="form-field">
+                    <label class="form-label">Descripción *</label>
+                    <textarea class="form-textarea" name="descripcion" required placeholder="Describe tu negocio, productos o servicios..."></textarea>
+                </div>
+                
+                <div class="form-field">
+                    <label class="form-label">Fecha de reapertura *</label>
+                    <input type="date" class="form-input" name="fechaReapertura" required min="2024-10-29">
+                </div>
+                
+                <div class="form-actions">
+                    <button type="button" class="btn-modal btn-secondary" onclick="closeAddBusinessModal()">Cancelar</button>
+                    <button type="submit" class="btn-modal btn-primary">Agregar local</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        // Formatear etiquetas de filtros
+        const formatFilterLabel = (filter) => {
+            const labels = {
+                'todos': 'Todos',
+                'alimentacion': 'Alimentación',
+                'animales': 'Animales',
+                'bares': 'Bares',
+                'restauracion': 'Restauración',
+                'servicios': 'Servicios',
+                'agrupaciones': 'Agrupaciones comerciales',
+                'hosteleria': 'Hostelería y turismo',
+                'ocio': 'Ocio, deporte y aficiones'
+            };
+            return labels[filter] || filter;
+        };
+
+        // Formatear tipos en las tarjetas
+        const formatTipo = (tipo) => {
+            const tipos = {
+                'alimentacion': 'Alimentación',
+                'animales': 'Animales',
+                'bares': 'Bares',
+                'restauracion': 'Restauración',
+                'servicios': 'Servicios',
+                'agrupaciones': 'Agrupaciones comerciales',
+                'hosteleria': 'Hostelería y turismo',
+                'ocio': 'Ocio, deporte y aficiones'
+            };
+            return tipos[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1);
+        };
+
+        // Formatear fecha de reapertura
+        const formatFecha = (fechaStr) => {
+            const fecha = new Date(fechaStr);
+            const opciones = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            };
+            return fecha.toLocaleDateString('es-ES', opciones);
+        };
+
+        // Obtener color de categoría
+        const getCategoryColor = (tipo) => {
+            const colors = {
+                'alimentacion': '#10b981', // Verde esmeralda
+                'animales': '#8b5cf6', // Violeta
+                'bares': '#f59e0b', // Ámbar
+                'restauracion': '#ef4444', // Rojo
+                'servicios': '#3b82f6', // Azul
+                'agrupaciones': '#06b6d4', // Cian
+                'hosteleria': '#ec4899', // Rosa
+                'ocio': '#84cc16' // Verde lima
+            };
+            return colors[tipo] || '#6b7280'; // Gris por defecto
+        };
+
+        // Variables globales para navegación
+        let destinationCoords = null;
+
+        // Abrir Google Maps directamente con navegación
+        const openNavigationModal = (nombre, direccion, lat, lng) => {
+            // Obtener ubicación actual del usuario
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(
+                    (position) => {
+                        const userLat = position.coords.latitude;
+                        const userLng = position.coords.longitude;
+                        
+                        // Crear URL de Google Maps con navegación desde ubicación actual
+                        const url = `https://www.google.com/maps/dir/${userLat},${userLng}/${lat},${lng}`;
+                        
+                        // Abrir en nueva pestaña
+                        window.open(url, '_blank');
+                    },
+                    (error) => {
+                        // Si no se puede obtener la ubicación, abrir solo con el destino
+                        const url = `https://www.google.com/maps/dir//${lat},${lng}`;
+                        window.open(url, '_blank');
+                    },
+                    {
+                        enableHighAccuracy: true,
+                        timeout: 10000,
+                        maximumAge: 60000
+                    }
+                );
+            } else {
+                // Si el navegador no soporta geolocalización, abrir solo con el destino
+                const url = `https://www.google.com/maps/dir//${lat},${lng}`;
+                window.open(url, '_blank');
+            }
+        };
+
+        // Manejar errores de imagen con fallback
+        const handleImageError = (img) => {
+            if (img.dataset.srcFallback && !img.dataset.triedFallback) {
+                // Intentar con el formato alternativo
+                img.dataset.triedFallback = 'true';
+                img.src = img.dataset.srcFallback;
+            } else {
+                // Si falla todo, mostrar placeholder
+                img.style.display = 'none';
+                const placeholder = img.parentNode.querySelector('.image-placeholder');
+                if (placeholder) {
+                    placeholder.style.display = 'flex';
+                    placeholder.innerHTML = `
+                        <div style="text-align: center; color: var(--text-muted); z-index: 1; position: relative;">
+                            <div style="font-size: 3rem; margin-bottom: 0.5rem; opacity: 0.7;">🏪</div>
+                            <div style="font-size: 0.9rem; font-weight: 600; opacity: 0.8;">${img.closest('.business-card').querySelector('.business-title')?.textContent || 'Local'}</div>
+                        </div>
+                    `;
+                }
+            }
+        };
+
+        // Crear tarjeta de comercio
+        const createBusinessCard = (comercio) => {
+            const card = document.createElement('div');
+            card.className = 'business-card';
+            card.dataset.comercioId = comercio.id;
+            card.dataset.tipo = comercio.tipo;
+            card.dataset.nombre = comercio.nombre.toLowerCase();
+
+            // Determinar la imagen basada en el ID
+            const imagePath = `assets/img/${comercio.id}.jpg`;
+            const fallbackPath = `assets/img/${comercio.id}.png`;
+
+            card.innerHTML = `
+                <div class="business-image-container">
+                    ${imagePath ? `
+                        <img src="${imagePath}" 
+                             alt="${comercio.nombre}" 
+                             class="business-image"
+                             data-src-fallback="${fallbackPath}"
+                             onerror="handleImageError(this)">
+                        <div class="image-placeholder" style="display: none;">
+                            <div style="text-align: center; color: var(--text-muted);">
+                                <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏪</div>
+                                <div style="font-size: 0.8rem;">ID: ${comercio.id}</div>
+                            </div>
+                        </div>
+                    ` : `
+                        <div class="image-placeholder">
+                            <div style="text-align: center; color: var(--text-muted); z-index: 1; position: relative;">
+                                <div style="font-size: 3rem; margin-bottom: 0.5rem; opacity: 0.7;">🏪</div>
+                                <div style="font-size: 0.9rem; font-weight: 600; opacity: 0.8;">${comercio.nombre}</div>
+                            </div>
+                        </div>
+                    `}
+                    <div class="category-badge" style="background: ${getCategoryColor(comercio.tipo)}">
+                        ${formatTipo(comercio.tipo)}
+                    </div>
+                </div>
+                <div class="business-content">
+                    <h3 class="business-title">${comercio.nombre}</h3>
+                    ${comercio.descripcion ? `<p class="business-description">${comercio.descripcion}</p>` : ''}
+                    <div class="business-address" ${comercio.lat && comercio.lng ? `onclick="openNavigationModal('${comercio.nombre}', '${comercio.direccion}', ${comercio.lat}, ${comercio.lng})" style="cursor: pointer;" tabindex="0" role="button" aria-label="Cómo llegar al negocio"` : ''}>
+                        📍 ${comercio.direccion}
+                    </div>
+                    <div class="business-details">
+                        ${comercio.telefono ? `<div class="business-detail"><strong>📞</strong> ${comercio.telefono}</div>` : ''}
+                        ${comercio.horario ? `<div class="business-detail"><strong>🕒</strong> ${comercio.horario}</div>` : ''}
+                    </div>
+                    ${comercio.fechaReapertura ? `<div class="reopen-date">Reabierto: ${formatFecha(comercio.fechaReapertura)}</div>` : ''}
+                </div>
+            `;
+
+            return card;
+        };
+
+
+
+        // Crear filtros dinámicamente
+        const createFilters = () => {
+            const container = document.getElementById('filtersContainer');
+            const tiposUnicos = ['todos', ...new Set(comercios.map(comercio => comercio.tipo))];
+            
+            container.innerHTML = '';
+            
+            tiposUnicos.forEach(filtro => {
+                const filterButton = document.createElement('button');
+                filterButton.className = `filter-chip ${filtro !== 'todos' ? filtro : ''} ${activeFilter === filtro ? 'active' : ''}`;
+                filterButton.textContent = formatFilterLabel(filtro);
+                
+                if (filtro !== 'todos') {
+                    const count = comercios.filter(c => c.tipo === filtro).length;
+                    filterButton.textContent += ` (${count})`;
+                }
+                
+                if (filtro === 'todos') {
+                    filterButton.textContent += ` (${comercios.length})`;
+                }
+                
+                filterButton.onclick = () => {
+                    activeFilter = filtro;
+                    filterBusinesses();
+                    updateFilters();
+                };
+                
+                container.appendChild(filterButton);
+            });
+        };
+
+        // Actualizar filtros
+        const updateFilters = () => {
+            const filterButtons = document.querySelectorAll('.filter-chip');
+            filterButtons.forEach(button => {
+                button.classList.remove('active');
+                if (button.textContent.includes(formatFilterLabel(activeFilter))) {
+                    button.classList.add('active');
+                }
+            });
+        };
+
+        // Filtrar comercios
+        const filterBusinesses = () => {
+            const grid = document.getElementById('businessGrid');
+            const emptyState = document.getElementById('emptyState');
+            
+            let filteredComercios = comercios;
+            
+            // Aplicar filtro de categoría
+            if (activeFilter !== 'todos') {
+                filteredComercios = comercios.filter(comercio => comercio.tipo === activeFilter);
+            }
+            
+            // Aplicar búsqueda
+            if (searchTerm) {
+                filteredComercios = filteredComercios.filter(comercio => 
+                    comercio.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    comercio.direccion.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    comercio.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                    formatTipo(comercio.tipo).toLowerCase().includes(searchTerm.toLowerCase())
+                );
+            }
+            
+            // Limpiar grid
+            grid.innerHTML = '';
+            
+            // Mostrar comercios filtrados
+            if (filteredComercios.length > 0) {
+                filteredComercios.forEach(comercio => {
+                    const card = createBusinessCard(comercio);
+                    grid.appendChild(card);
+                });
+                emptyState.classList.remove('show');
+            } else {
+                emptyState.classList.add('show');
+            }
+        };
+
+        // Búsqueda en tiempo real
+        const handleRealTimeSearch = (term) => {
+            searchTerm = term;
+            filterBusinesses();
+        };
+
+        // Configurar búsqueda
+        const setupSearch = () => {
+            const searchInput = document.getElementById('searchInput');
+            let timeout;
+            
+            searchInput.addEventListener('input', (e) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => {
+                    handleRealTimeSearch(e.target.value);
+                }, 300);
+            });
+        };
+
+
+
+        // Page Transition
+        const setupPageTransition = () => {
+            const pageContent = document.querySelector('.page-transition');
+            if (pageContent) {
+                setTimeout(() => {
+                    pageContent.classList.add('loaded');
+                }, 100);
+            }
+        };
+
+        // Search Suggestions
+        const setupSearchSuggestions = () => {
+            const searchInput = document.getElementById('searchInput');
+            const suggestionsContainer = document.getElementById('searchSuggestions');
+            
+            if (searchInput && suggestionsContainer) {
+                searchInput.addEventListener('input', (e) => {
+                    const searchTerm = e.target.value;
+                    
+                    // Filtrado en tiempo real de las tarjetas
+                    handleRealTimeSearch(searchTerm);
+                    
+                    // Gestión de sugerencias
+                    if (searchTerm.length < 2) {
+                        suggestionsContainer.classList.remove('show');
+                        return;
+                    }
+                    
+                    const suggestions = [];
+                    const tipos = ['alimentacion', 'bares', 'restauracion', 'animales'];
+                    
+                    // Sugerencias de tipos
+                    tipos.forEach(tipo => {
+                        if (tipo.includes(searchTerm.toLowerCase())) {
+                            suggestions.push({
+                                text: formatTipo(tipo),
+                                type: 'filter',
+                                icon: '🏷️',
+                                category: 'Categoría'
+                            });
+                        }
+                    });
+                    
+                    // Sugerencias de comercios
+                    if (comercios) {
+                        comercios.forEach(comercio => {
+                            if (comercio.nombre.toLowerCase().includes(searchTerm.toLowerCase())) {
+                                suggestions.push({
+                                    text: comercio.nombre,
+                                    type: 'business',
+                                    icon: '🏪',
+                                    category: formatTipo(comercio.tipo)
+                                });
+                            }
+                        });
+                    }
+                    
+                    // Mostrar sugerencias
+                    if (suggestions.length > 0) {
+                        suggestionsContainer.innerHTML = suggestions.slice(0, 5).map(suggestion => `
+                            <div class="suggestion-item" onclick="selectSuggestion('${suggestion.text}')">
+                                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span>${suggestion.icon}</span>
+                                    <span>${suggestion.text}</span>
+                                </div>
+                                <div class="suggestion-category">${suggestion.category}</div>
+                            </div>
+                        `).join('');
+                        suggestionsContainer.classList.add('show');
+                    } else {
+                        suggestionsContainer.classList.remove('show');
+                    }
+                });
+                
+                // Cerrar sugerencias al hacer clic fuera
+                document.addEventListener('click', (e) => {
+                    if (!searchInput.contains(e.target) && !suggestionsContainer.contains(e.target)) {
+                        suggestionsContainer.classList.remove('show');
+                    }
+                });
+            }
+        };
+
+        // Seleccionar sugerencia
+        const selectSuggestion = (text) => {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.value = text;
+            handleRealTimeSearch(text);
+            document.getElementById('searchSuggestions').classList.remove('show');
+        };
+
+
+
+        // Modal de agregar negocio
+        const openAddBusinessModal = () => {
+            document.getElementById('addBusinessModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        };
+
+        const closeAddBusinessModal = () => {
+            document.getElementById('addBusinessModal').classList.remove('show');
+            document.body.style.overflow = '';
+            
+            // Limpiar formulario
+            const form = document.getElementById('addBusinessForm');
+            if (form) {
+                form.reset();
+            }
+            
+            // Restaurar contenido del modal si se había cambiado
+            const modal = document.querySelector('.modal');
+            if (modal && !modal.querySelector('.modal-header')) {
+                modal.innerHTML = `
+                    <div class="modal-header">
+                        <h3 class="modal-title">🏪 Agregar mi local</h3>
+                        <button class="modal-close" onclick="closeAddBusinessModal()">×</button>
+                    </div>
+                    
+                    <form class="modal-form" id="addBusinessForm">
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label class="form-label">Nombre del negocio *</label>
+                                <input type="text" class="form-input" name="nombre" required placeholder="Ej: Panadería El Horno">
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label">Tipo de negocio *</label>
+                                <select class="form-select" name="tipo" required>
+                                    <option value="">Selecciona categoría</option>
+                                    <option value="alimentacion">Alimentación</option>
+                                    <option value="bares">Bares</option>
+                                    <option value="restauracion">Restauración</option>
+                                    <option value="servicios">Servicios</option>
+                                    <option value="animales">Animales</option>
+                                    <option value="agrupaciones">Agrupaciones comerciales</option>
+                                    <option value="hosteleria">Hostelería y turismo</option>
+                                    <option value="ocio">Ocio, deporte y aficiones</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="form-label">Dirección *</label>
+                            <input type="text" class="form-input" name="direccion" required placeholder="Ej: Calle Mayor, 1, Paiporta">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label class="form-label">Teléfono *</label>
+                                <input type="tel" class="form-input" name="telefono" required placeholder="+34 123 456 789">
+                            </div>
+                            <div class="form-field">
+                                <label class="form-label">Horario</label>
+                                <input type="text" class="form-input" name="horario" placeholder="Ej: L-V 9:00-18:00">
+                            </div>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="form-label">Descripción *</label>
+                            <textarea class="form-textarea" name="descripcion" required placeholder="Describe tu negocio, productos o servicios..."></textarea>
+                        </div>
+                        
+                        <div class="form-field">
+                            <label class="form-label">Fecha de reapertura *</label>
+                            <input type="date" class="form-input" name="fechaReapertura" required min="2024-10-29">
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="button" class="btn-modal btn-secondary" onclick="closeAddBusinessModal()">Cancelar</button>
+                            <button type="submit" class="btn-modal btn-primary">Agregar local</button>
+                        </div>
+                    </form>
+                `;
+                
+                // Reconfigurar el formulario
+                const newForm = modal.querySelector('#addBusinessForm');
+                if (newForm) {
+                    newForm.addEventListener('submit', handleAddBusinessForm);
+                }
+            }
+        };
+
+        // Manejar envío del formulario
+        const handleAddBusinessForm = (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const businessData = {
+                id: Date.now(),
+                nombre: formData.get('nombre'),
+                tipo: formData.get('tipo'),
+                direccion: formData.get('direccion'),
+                telefono: formData.get('telefono'),
+                horario: formData.get('horario'),
+                descripcion: formData.get('descripcion'),
+                fechaReapertura: formData.get('fechaReapertura'),
+                timestamp: new Date().toISOString()
+            };
+
+            // Guardar en localStorage
+            const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
+            pendingBusinesses.push(businessData);
+            localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
+
+            // Mostrar mensaje de éxito
+            const modal = document.querySelector('.modal');
+            modal.innerHTML = `
+                <div class="success-message">
+                    <div class="success-icon">✅</div>
+                    <h3>¡Local agregado correctamente!</h3>
+                    <p>Tu negocio ha sido añadido al directorio. Aparecerá en la lista una vez sea revisado.</p>
+                    <button class="btn-modal btn-primary" onclick="closeAddBusinessModal()">Cerrar</button>
+                </div>
+            `;
+
+            // Recargar la página después de 2 segundos
+            setTimeout(() => {
+                window.location.reload();
+            }, 2000);
+        };
+
+        // Configurar formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addBusinessForm');
+            if (form) {
+                form.addEventListener('submit', handleAddBusinessForm);
+            }
+
+            // Cerrar modal con Escape
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeAddBusinessModal();
+                }
+            });
+
+            // Cerrar modal al hacer clic fuera
+            document.getElementById('addBusinessModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    closeAddBusinessModal();
+                }
+            });
+        });
+
+        // Inicializar aplicación
+        const initApp = () => {
+            createFilters();
+            filterBusinesses();
+            setupSearch();
+            setupPageTransition();
+            setupSearchSuggestions();
+        };
+
+        // Variables globales
+        let comercios = [];
+        let filteredComercios = [];
+        let searchTerm = '';
+        let activeFilter = 'todos';
+
+        // Cargar comercios
+        async function loadComercios() {
+            try {
+                const res = await fetch('data/comercios.json');
+                if (!res.ok) throw new Error('No se pudo cargar el fichero de comercios.');
+                comercios = await res.json();
+                
+                // Cargar locales pendientes del localStorage
+                const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
+                comercios = [...comercios, ...pendingBusinesses];
+                
+                filteredComercios = comercios;
+                initApp();
+            } catch (err) {
+                document.getElementById('businessGrid').innerHTML = '';
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('emptyState').innerHTML = `<h3>Error al cargar comercios</h3><p>${err.message}</p>`;
+            }
+        }
+
+        // Inicializar cuando el DOM esté listo
+        document.addEventListener('DOMContentLoaded', loadComercios);
+    </script>
+</body>
+</html> 
