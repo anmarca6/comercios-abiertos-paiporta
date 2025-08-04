@@ -555,7 +555,7 @@
     </div>
 
     <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap"></script>
     
     <!-- Datepicker JS -->
     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/js/datepicker.min.js"></script>
@@ -704,6 +704,13 @@
         function initDatePicker() {
             const dateInput = document.getElementById('businessReopenDate');
             
+            // Esperar a que la librería esté disponible
+            if (typeof Datepicker === 'undefined') {
+                console.log('Datepicker no disponible, reintentando en 500ms...');
+                setTimeout(initDatePicker, 500);
+                return;
+            }
+            
             try {
                 const datepicker = new Datepicker(dateInput, {
                     format: 'dd/mm/yyyy',
@@ -763,14 +770,6 @@
                 form.addEventListener('submit', handleAddBusinessForm);
             }
 
-            // Inicializar mapa después de que Google Maps esté cargado
-            if (typeof google !== 'undefined' && google.maps) {
-                initMap();
-            } else {
-                // Esperar a que Google Maps se cargue
-                window.initMap = initMap;
-            }
-
             const textarea = document.getElementById('businessDescription');
             if (textarea) {
                 textarea.addEventListener('input', updateCharCounter);
@@ -788,7 +787,7 @@
             }
 
             // Inicializar datepicker después de que las librerías estén cargadas
-            setTimeout(initDatePicker, 100);
+            setTimeout(initDatePicker, 1000);
 
             document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
             document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
