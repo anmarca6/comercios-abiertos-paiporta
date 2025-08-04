@@ -270,12 +270,13 @@
 
         .map-container {
             width: 100%;
-            height: 500px;
+            height: 600px;
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid var(--border);
             position: relative;
             flex: 1;
+            min-height: 600px;
         }
 
         .map-instructions {
@@ -287,6 +288,7 @@
             height: 100%;
             display: flex;
             flex-direction: column;
+            min-height: 700px;
         }
 
         .map-instructions h4 {
@@ -774,7 +776,7 @@
             const address = document.getElementById('businessAddress').value.trim();
             
             if (!address) {
-                updateMapStatus('error', '❌ Por favor, escribe una dirección primero.');
+                updateMapStatus('error', '❌ Por favor, escribe una dirección primero');
                 return;
             }
 
