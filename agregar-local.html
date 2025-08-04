@@ -682,6 +682,12 @@
 
     <!-- Vercel Analytics -->
     <script defer src="/_vercel/insights/script.js"></script>
+    <script>
+        // Fallback para Vercel Analytics en desarrollo local
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            console.log('Vercel Analytics deshabilitado en desarrollo local');
+        }
+    </script>
     
     <!-- EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -702,8 +708,24 @@
         // Inicializar mapa con Leaflet
         function initMap() {
             try {
+                console.log('Inicializando mapa...');
                 const paiportaCoords = [39.4283, -0.4175];
                 
+                // Verificar que el elemento del mapa existe
+                const mapElement = document.getElementById('map');
+                if (!mapElement) {
+                    console.error('Elemento del mapa no encontrado');
+                    return;
+                }
+                
+                // Verificar que Leaflet está disponible
+                if (typeof L === 'undefined') {
+                    console.error('Leaflet no está disponible');
+                    updateMapStatus('error', '❌ Error: Leaflet no está cargado');
+                    return;
+                }
+                
+                console.log('Creando mapa Leaflet...');
                 map = L.map('map').setView(paiportaCoords, 15);
                 
                 // Añadir capa de OpenStreetMap
@@ -716,7 +738,9 @@
                     placeMarker(e.latlng);
                 });
                 
-                // Mapa cargado correctamente, sin mostrar mensaje inicial
+                console.log('Mapa inicializado correctamente');
+                updateMapStatus('success', '✅ Mapa cargado correctamente');
+                
             } catch (error) {
                 console.error('Error al inicializar el mapa:', error);
                 updateMapStatus('error', '❌ Error al cargar el mapa. Verifica tu conexión a internet.');
@@ -1197,31 +1221,49 @@
                 console.warn('EmailJS no está configurado:', error);
             }
 
-            // Verificar si Leaflet está disponible
-            if (typeof L !== 'undefined') {
-                // Inicializar mapa
-                initMap();
-                
-                // Configurar botones del mapa
-                document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
-                document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
-                                 document.getElementById('confirmLocationBtn').addEventListener('click', function() {
-                     updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
-                     this.disabled = true;
-                 });
-            } else {
-                // Fallback si Leaflet no está disponible
-                document.getElementById('map').innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                            <p>Mapa no disponible</p>
-                            <p style="font-size: 0.8rem;">Puedes continuar sin el mapa</p>
-                        </div>
-                    </div>
-                `;
-                updateMapStatus('warning', '⚠️ Mapa no disponible. Puedes continuar sin él.');
-            }
+            // Inicializar mapa con retraso para asegurar que Leaflet esté cargado
+            setTimeout(() => {
+                console.log('Verificando Leaflet...');
+                if (typeof L !== 'undefined') {
+                    console.log('Leaflet disponible, inicializando mapa...');
+                    // Inicializar mapa
+                    initMap();
+                    
+                    // Configurar botones del mapa
+                    const searchBtn = document.getElementById('searchLocationBtn');
+                    const clearBtn = document.getElementById('clearMarkerBtn');
+                    const confirmBtn = document.getElementById('confirmLocationBtn');
+                    
+                    if (searchBtn) {
+                        searchBtn.addEventListener('click', searchAddress);
+                    }
+                    if (clearBtn) {
+                        clearBtn.addEventListener('click', clearMarker);
+                    }
+                    if (confirmBtn) {
+                        confirmBtn.addEventListener('click', function() {
+                            updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
+                            this.disabled = true;
+                        });
+                    }
+                } else {
+                    console.error('Leaflet no está disponible');
+                    // Fallback si Leaflet no está disponible
+                    const mapElement = document.getElementById('map');
+                    if (mapElement) {
+                        mapElement.innerHTML = `
+                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
+                                <div style="text-align: center;">
+                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                                    <p>Mapa no disponible</p>
+                                    <p style="font-size: 0.8rem;">Puedes continuar sin el mapa</p>
+                                </div>
+                            </div>
+                        `;
+                    }
+                    updateMapStatus('warning', '⚠️ Mapa no disponible. Puedes continuar sin él.');
+                }
+            }, 1000); // Esperar 1 segundo para que Leaflet se cargue
         });
     </script>
 </body>
