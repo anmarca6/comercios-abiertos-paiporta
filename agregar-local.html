@@ -176,6 +176,56 @@
             font-style: italic;
         }
 
+        .image-upload-container {
+            border: 2px dashed var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .image-upload-container:hover {
+            border-color: var(--primary-solid);
+            background: rgba(102, 126, 234, 0.02);
+        }
+
+        .image-preview {
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .image-preview img {
+            max-width: 100%;
+            max-height: 200px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .remove-image-btn {
+            margin-top: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .remove-image-btn:hover {
+            background: #dc2626;
+        }
+
+        .image-help {
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .image-help p {
+            margin: 0.25rem 0;
+        }
+
         .map-section {
             margin-top: var(--space-lg);
         }
@@ -410,12 +460,28 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
+                                                                <div class="form-group">
                                     <label for="businessDescription" class="form-label">Descripción *</label>
                                     <textarea id="businessDescription" name="descripcion" class="form-textarea" required 
-                                              rows="3" maxlength="150" 
-                                              placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
+                                               rows="3" maxlength="150" 
+                                               placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
                                     <div class="char-counter" id="charCounter">0 / 150 caracteres</div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessImage" class="form-label">Imagen del negocio (opcional)</label>
+                                    <div class="image-upload-container">
+                                        <input type="file" id="businessImage" name="imagen" class="form-input" 
+                                               accept="image/*" capture="environment">
+                                        <div class="image-preview" id="imagePreview" style="display: none;">
+                                            <img id="previewImg" src="" alt="Vista previa">
+                                            <button type="button" class="remove-image-btn" id="removeImageBtn">🗑️ Eliminar</button>
+                                        </div>
+                                        <div class="image-help">
+                                            <p>📱 Puedes tomar una foto con la cámara o seleccionar una imagen de tu galería</p>
+                                            <p>📏 Tamaño máximo: 2MB | Formatos: JPG, PNG, WebP</p>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -563,8 +629,10 @@
     <!-- EmailJS -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
-    <!-- Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap"></script>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     
 
     
@@ -572,26 +640,23 @@
         // Variables globales del mapa
         let map;
         let marker;
-        let geocoder;
         let selectedCoordinates = null;
 
-        // Inicializar mapa
+        // Inicializar mapa con Leaflet
         function initMap() {
             try {
-                const paiportaCoords = { lat: 39.4283, lng: -0.4175 };
+                const paiportaCoords = [39.4283, -0.4175];
                 
-                map = new google.maps.Map(document.getElementById('map'), {
-                    zoom: 15,
-                    center: paiportaCoords,
-                    mapTypeControl: false,
-                    streetViewControl: false,
-                    fullscreenControl: false
-                });
+                map = L.map('map').setView(paiportaCoords, 15);
+                
+                // Añadir capa de OpenStreetMap
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    attribution: '© OpenStreetMap contributors'
+                }).addTo(map);
 
-                geocoder = new google.maps.Geocoder();
-
-                map.addListener('click', function(event) {
-                    placeMarker(event.latLng);
+                // Evento de clic en el mapa
+                map.on('click', function(e) {
+                    placeMarker(e.latlng);
                 });
                 
                 updateMapStatus('success', '✅ Mapa cargado correctamente. Escribe una dirección o haz clic para colocar el marcador.');
@@ -611,24 +676,21 @@
         }
 
         // Colocar marcador en el mapa
-        function placeMarker(latLng) {
+        function placeMarker(latlng) {
             if (marker) {
-                marker.setMap(null);
+                map.removeLayer(marker);
             }
 
-            marker = new google.maps.Marker({
-                position: latLng,
-                map: map,
+            marker = L.marker(latlng, {
                 draggable: true,
                 title: 'Ubicación del negocio'
-            });
+            }).addTo(map);
 
-            map.setCenter(latLng);
-            map.setZoom(17);
+            map.setView(latlng, 17);
 
             selectedCoordinates = {
-                lat: latLng.lat(),
-                lng: latLng.lng()
+                lat: latlng.lat,
+                lng: latlng.lng
             };
 
             document.getElementById('businessLat').value = selectedCoordinates.lat;
@@ -637,9 +699,21 @@
             updateCoordinatesDisplay();
             document.getElementById('confirmLocationBtn').style.display = 'inline-flex';
             updateMapStatus('success', '✅ Ubicación seleccionada. Puedes arrastrar el marcador si necesitas ajustarlo.');
+
+            // Evento de arrastre del marcador
+            marker.on('dragend', function(e) {
+                const newLatLng = e.target.getLatLng();
+                selectedCoordinates = {
+                    lat: newLatLng.lat,
+                    lng: newLatLng.lng
+                };
+                document.getElementById('businessLat').value = selectedCoordinates.lat;
+                document.getElementById('businessLng').value = selectedCoordinates.lng;
+                updateCoordinatesDisplay();
+            });
         }
 
-        // Buscar dirección en el mapa
+        // Buscar dirección usando Nominatim (OpenStreetMap)
         function searchAddress() {
             const address = document.getElementById('businessAddress').value.trim();
             
@@ -650,17 +724,25 @@
 
             updateMapStatus('warning', '🔍 Buscando dirección...');
 
-            geocoder.geocode({ address: address + ', Paiporta, Valencia, Spain' }, function(results, status) {
-                if (status === 'OK') {
-                    const location = results[0].geometry.location;
-                    placeMarker(location);
-                    updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
-                } else {
-                    updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
-                    map.setCenter({ lat: 39.4283, lng: -0.4175 });
-                    map.setZoom(15);
-                }
-            });
+            const searchUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Paiporta, Valencia, Spain')}&limit=1`;
+
+            fetch(searchUrl)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.length > 0) {
+                        const location = data[0];
+                        const latlng = [parseFloat(location.lat), parseFloat(location.lon)];
+                        placeMarker(latlng);
+                        updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
+                    } else {
+                        updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+                        map.setView([39.4283, -0.4175], 15);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al buscar dirección:', error);
+                    updateMapStatus('error', '❌ Error al buscar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+                });
         }
 
         // Actualizar estado del mapa
@@ -682,7 +764,7 @@
         // Limpiar marcador
         function clearMarker() {
             if (marker) {
-                marker.setMap(null);
+                map.removeLayer(marker);
                 marker = null;
             }
             selectedCoordinates = null;
@@ -731,6 +813,47 @@
             const month = (date.getMonth() + 1).toString().padStart(2, '0');
             const year = date.getFullYear();
             return `${day}/${month}/${year}`;
+        }
+
+        // Manejar carga de imagen
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            const maxSize = 2 * 1024 * 1024; // 2MB
+            
+            if (!file) return;
+            
+            // Validar tipo de archivo
+            if (!file.type.startsWith('image/')) {
+                alert('Por favor, selecciona solo archivos de imagen (JPG, PNG, WebP)');
+                event.target.value = '';
+                return;
+            }
+            
+            // Validar tamaño
+            if (file.size > maxSize) {
+                alert('La imagen es demasiado grande. El tamaño máximo es 2MB');
+                event.target.value = '';
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const previewImg = document.getElementById('previewImg');
+                const imagePreview = document.getElementById('imagePreview');
+                
+                previewImg.src = e.target.result;
+                imagePreview.style.display = 'block';
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // Eliminar imagen
+        function removeImage() {
+            const imageInput = document.getElementById('businessImage');
+            const imagePreview = document.getElementById('imagePreview');
+            
+            imageInput.value = '';
+            imagePreview.style.display = 'none';
         }
 
         // Validación completa del formulario
@@ -857,6 +980,18 @@
             
             try {
                 const formData = new FormData(e.target);
+                // Procesar imagen si existe
+                const imageFile = formData.get('imagen');
+                let imageData = null;
+                
+                if (imageFile && imageFile.size > 0) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        imageData = e.target.result;
+                    };
+                    reader.readAsDataURL(imageFile);
+                }
+
                 const businessData = {
                     id: Date.now(),
                     nombre: formData.get('nombre').trim(),
@@ -868,6 +1003,7 @@
                     fechaReapertura: formData.get('fechaReapertura'),
                     lat: formData.get('lat') || '0',
                     lng: formData.get('lng') || '0',
+                    imagen: imageData,
                     timestamp: new Date().toISOString()
                 };
 
@@ -953,10 +1089,14 @@
                     this.style.boxShadow = 'none';
                 });
                 
-                // Añadir evento para mostrar el datepicker en móviles
+                // Forzar la apertura del datepicker en móviles
                 dateInput.addEventListener('click', function() {
+                    // En móviles, intentar abrir el datepicker nativo
                     if (this.showPicker && typeof this.showPicker === 'function') {
                         this.showPicker();
+                    } else {
+                        // Fallback: hacer focus para abrir el datepicker
+                        this.focus();
                     }
                 });
                 
@@ -975,6 +1115,18 @@
                     }
                 });
             }
+
+            // Configurar manejo de imagen
+            const imageInput = document.getElementById('businessImage');
+            const removeImageBtn = document.getElementById('removeImageBtn');
+            
+            if (imageInput) {
+                imageInput.addEventListener('change', handleImageUpload);
+            }
+            
+            if (removeImageBtn) {
+                removeImageBtn.addEventListener('click', removeImage);
+            }
             
             // Inicializar EmailJS
             try {
@@ -983,15 +1135,19 @@
                 console.warn('EmailJS no está configurado:', error);
             }
 
-            // Verificar si Google Maps está disponible
-            if (typeof google !== 'undefined' && google.maps) {
+            // Verificar si Leaflet está disponible
+            if (typeof L !== 'undefined') {
+                // Inicializar mapa
+                initMap();
+                
+                // Configurar botones del mapa
                 document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
                 document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
                 document.getElementById('confirmLocationBtn').addEventListener('click', function() {
                     updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
                 });
             } else {
-                // Fallback si Google Maps no está disponible
+                // Fallback si Leaflet no está disponible
                 document.getElementById('map').innerHTML = `
                     <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
                         <div style="text-align: center;">
