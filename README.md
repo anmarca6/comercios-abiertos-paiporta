@@ -105,14 +105,24 @@ Edita el archivo `data/comercios.json` siguiendo este formato:
 ```
 
 ### **Categorías disponibles:**
-- `alimentacion` - Alimentación
-- `bares` - Bares
-- `restauracion` - Restauración
-- `servicios` - Servicios
-- `animales` - Animales
-- `agrupaciones` - Agrupaciones comerciales
-- `hosteleria` - Hostelería y turismo
-- `ocio` - Ocio, deporte y aficiones
+- `agrupaciones` - 🏢 Agrupaciones comerciales
+- `alimentacion` - 🛒 Alimentación
+- `carburantes` - ⛽ Carburantes
+- `drogueria` - 🧴 Droguería y perfumería
+- `finanzas` - 💳 Finanzas y gestión
+- `flores` - 🌸 Flores, jardinería y animales
+- `hosteleria` - 🏨 Hostelería y turismo
+- `informatica` - 💻 Informática, imagen y sonido
+- `joyeria` - 💍 Joyería y relojería
+- `hogar` - 🏠 Hogar y decoración
+- `mayoristas` - 📦 Mayoristas
+- `moda` - 👗 Moda y complementos
+- `ocio` - ⚽ Ocio, deportes y aficiones
+- `papeleria` - 📚 Papelería, librería y quioscos
+- `salud` - 💊 Salud y belleza
+- `servicios` - 🔧 Servicios
+- `tabaco` - 🚬 Tabaco y loterías
+- `automocion` - 🚗 Automoción
 
 ### **Añadir imágenes:**
 1. Coloca las imágenes en `assets/img/`

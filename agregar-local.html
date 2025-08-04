@@ -725,6 +725,14 @@
                     return;
                 }
                 
+                // Verificar que el contenedor del mapa tiene dimensiones
+                const container = document.getElementById('mapContainer');
+                if (container && container.offsetHeight === 0) {
+                    console.log('Contenedor del mapa sin altura, esperando...');
+                    setTimeout(initMap, 500);
+                    return;
+                }
+                
                 console.log('Creando mapa Leaflet...');
                 map = L.map('map').setView(paiportaCoords, 15);
                 
@@ -738,21 +746,31 @@
                     placeMarker(e.latlng);
                 });
                 
+                // Forzar actualización del mapa
+                setTimeout(() => {
+                    if (map) {
+                        map.invalidateSize();
+                    }
+                }, 100);
+                
                 console.log('Mapa inicializado correctamente');
                 updateMapStatus('success', '✅ Mapa cargado correctamente');
                 
             } catch (error) {
                 console.error('Error al inicializar el mapa:', error);
                 updateMapStatus('error', '❌ Error al cargar el mapa. Verifica tu conexión a internet.');
-                document.getElementById('map').innerHTML = `
-                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
-                        <div style="text-align: center;">
-                            <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                            <p>No se pudo cargar el mapa</p>
-                            <p style="font-size: 0.8rem;">Verifica tu conexión a internet</p>
+                const mapElement = document.getElementById('map');
+                if (mapElement) {
+                    mapElement.innerHTML = `
+                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
+                            <div style="text-align: center;">
+                                <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                                <p>No se pudo cargar el mapa</p>
+                                <p style="font-size: 0.8rem;">Verifica tu conexión a internet</p>
+                            </div>
                         </div>
-                    </div>
-                `;
+                    `;
+                }
             }
         }
 
@@ -1186,11 +1204,24 @@
                 const today = new Date();
                 const maxDate = new Date('2024-10-29');
                 
-                dateInput.min = today.toISOString().split('T')[0];
-                dateInput.max = maxDate.toISOString().split('T')[0];
+                // Formatear fechas para el input type="date"
+                const todayFormatted = today.toISOString().split('T')[0];
+                const maxDateFormatted = maxDate.toISOString().split('T')[0];
+                
+                console.log('Configurando datepicker:', { todayFormatted, maxDateFormatted });
+                
+                dateInput.min = todayFormatted;
+                dateInput.max = maxDateFormatted;
+                
+                // Añadir evento click para forzar la apertura del datepicker
+                dateInput.addEventListener('click', function() {
+                    console.log('Click en datepicker');
+                    this.showPicker();
+                });
                 
                 // Validar fecha al cambiar
                 dateInput.addEventListener('change', function() {
+                    console.log('Fecha seleccionada:', this.value);
                     const selectedDate = new Date(this.value);
                     const today = new Date();
                     today.setHours(0, 0, 0, 0);
@@ -1200,6 +1231,15 @@
                         this.value = '';
                     }
                 });
+                
+                // Añadir evento focus para mejorar la experiencia
+                dateInput.addEventListener('focus', function() {
+                    console.log('Focus en datepicker');
+                });
+                
+                console.log('Datepicker configurado correctamente');
+            } else {
+                console.error('Elemento datepicker no encontrado');
             }
 
             // Configurar manejo de imagen
@@ -1263,7 +1303,7 @@
                     }
                     updateMapStatus('warning', '⚠️ Mapa no disponible. Puedes continuar sin él.');
                 }
-            }, 1000); // Esperar 1 segundo para que Leaflet se cargue
+            }, 2000); // Aumentar el tiempo de espera a 2 segundos
         });
     </script>
 </body>
