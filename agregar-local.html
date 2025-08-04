@@ -226,6 +226,141 @@
             margin: 0.25rem 0;
         }
 
+        /* Datepicker personalizado */
+        .date-input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .date-picker-btn {
+            position: absolute;
+            right: 0.5rem;
+            background: none;
+            border: none;
+            font-size: 1.2rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .date-picker-btn:hover {
+            background: rgba(102, 126, 234, 0.1);
+        }
+
+        .date-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .date-picker-content {
+            background: white;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            max-width: 350px;
+            width: 90%;
+        }
+
+        .date-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .date-nav-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .date-nav-btn:hover {
+            background: var(--background);
+        }
+
+        #currentMonth {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .date-picker-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .calendar-day {
+            padding: 0.5rem;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day:hover {
+            background: var(--background);
+        }
+
+        .calendar-day.selected {
+            background: var(--primary-solid);
+            color: white;
+        }
+
+        .calendar-day.disabled {
+            color: var(--text-secondary);
+            cursor: not-allowed;
+        }
+
+        .calendar-day.other-month {
+            color: var(--text-secondary);
+            opacity: 0.5;
+        }
+
+        .date-picker-actions {
+            display: flex;
+            gap: 0.5rem;
+            justify-content: flex-end;
+        }
+
+        .date-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .date-btn:hover {
+            background: var(--background);
+        }
+
+        .date-btn.primary {
+            background: var(--primary-solid);
+            color: white;
+            border-color: var(--primary-solid);
+        }
+
+        .date-btn.primary:hover {
+            background: #1e3a8a;
+        }
+
         .map-section {
             margin-top: var(--space-lg);
         }
@@ -544,11 +679,33 @@
 
                                 <div class="form-group">
                                     <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
-                                    <input type="date" id="businessReopenDate" name="fechaReapertura" 
-                                           class="form-input" required
-                                           style="position: relative; z-index: 10; cursor: pointer;">
+                                    <div class="date-input-container">
+                                        <input type="text" id="businessReopenDate" name="fechaReapertura" 
+                                               class="form-input" required readonly
+                                               placeholder="Selecciona una fecha"
+                                               style="position: relative; z-index: 10; cursor: pointer;">
+                                        <button type="button" class="date-picker-btn" id="openDatePicker">
+                                            📅
+                                        </button>
+                                    </div>
                                     <div class="date-help" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                         Selecciona una fecha entre hoy y el 29 de octubre de 2024
+                                    </div>
+                                    <div class="date-picker-modal" id="datePickerModal" style="display: none;">
+                                        <div class="date-picker-content">
+                                            <div class="date-picker-header">
+                                                <button type="button" class="date-nav-btn" id="prevMonth">‹</button>
+                                                <span id="currentMonth">Diciembre 2024</span>
+                                                <button type="button" class="date-nav-btn" id="nextMonth">›</button>
+                                            </div>
+                                            <div class="date-picker-calendar" id="datePickerCalendar">
+                                                <!-- Los días se generarán dinámicamente -->
+                                            </div>
+                                            <div class="date-picker-actions">
+                                                <button type="button" class="date-btn" id="cancelDate">Cancelar</button>
+                                                <button type="button" class="date-btn primary" id="confirmDate">Confirmar</button>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -923,12 +1080,13 @@
             }
             
             // Validar fecha de reapertura
-            const fechaReapertura = document.getElementById('businessReopenDate').value;
+            const fechaReapertura = document.getElementById('businessReopenDate').getAttribute('data-date');
             if (!fechaReapertura) {
                 errors.push('Debes seleccionar una fecha de reapertura');
             } else {
                 const selectedDate = new Date(fechaReapertura);
                 const today = new Date();
+                today.setHours(0, 0, 0, 0);
                 const maxDate = new Date('2024-10-29');
                 
                 if (selectedDate < today) {
@@ -1032,7 +1190,7 @@
                     telefono: formData.get('countryCode') + ' ' + formData.get('telefono'),
                     horario: formData.get('horario').trim(),
                     descripcion: formData.get('descripcion').trim(),
-                    fechaReapertura: formData.get('fechaReapertura'),
+                    fechaReapertura: document.getElementById('businessReopenDate').getAttribute('data-date') || formData.get('fechaReapertura'),
                     lat: formData.get('lat') || '0',
                     lng: formData.get('lng') || '0',
                     imagen: imageData,
@@ -1103,50 +1261,158 @@
                 });
             }
 
-            // Configurar fecha mínima para el campo de fecha
+            // Datepicker personalizado
+            let currentDate = new Date();
+            let selectedDate = null;
+            let currentMonth = new Date();
+            
             const dateInput = document.getElementById('businessReopenDate');
-            if (dateInput) {
+            const openDatePickerBtn = document.getElementById('openDatePicker');
+            const datePickerModal = document.getElementById('datePickerModal');
+            const currentMonthSpan = document.getElementById('currentMonth');
+            const datePickerCalendar = document.getElementById('datePickerCalendar');
+            const prevMonthBtn = document.getElementById('prevMonth');
+            const nextMonthBtn = document.getElementById('nextMonth');
+            const cancelDateBtn = document.getElementById('cancelDate');
+            const confirmDateBtn = document.getElementById('confirmDate');
+
+            function formatDateForDisplay(date) {
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                return `${day}/${month}/${year}`;
+            }
+
+            function formatDateForInput(date) {
+                const day = date.getDate().toString().padStart(2, '0');
+                const month = (date.getMonth() + 1).toString().padStart(2, '0');
+                const year = date.getFullYear();
+                return `${year}-${month}-${day}`;
+            }
+
+            function isDateDisabled(date) {
                 const today = new Date();
-                const todayString = today.toISOString().split('T')[0];
-                const maxDate = '2024-10-29';
+                today.setHours(0, 0, 0, 0);
+                const maxDate = new Date('2024-10-29');
+                return date < today || date > maxDate;
+            }
+
+            function renderCalendar() {
+                const year = currentMonth.getFullYear();
+                const month = currentMonth.getMonth();
                 
-                dateInput.min = todayString;
-                dateInput.max = maxDate;
+                // Actualizar el mes mostrado
+                const monthNames = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 
+                                  'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                currentMonthSpan.textContent = `${monthNames[month]} ${year}`;
                 
-                // Mejorar la experiencia del datepicker
-                dateInput.addEventListener('focus', function() {
-                    this.style.borderColor = 'var(--primary-solid)';
-                    this.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                // Obtener el primer día del mes y el último día
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const startDate = new Date(firstDay);
+                startDate.setDate(startDate.getDate() - firstDay.getDay());
+                
+                // Limpiar calendario
+                datePickerCalendar.innerHTML = '';
+                
+                // Añadir días de la semana
+                const weekDays = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+                weekDays.forEach(day => {
+                    const dayHeader = document.createElement('div');
+                    dayHeader.className = 'calendar-day';
+                    dayHeader.style.fontWeight = 'bold';
+                    dayHeader.textContent = day;
+                    datePickerCalendar.appendChild(dayHeader);
                 });
                 
-                dateInput.addEventListener('blur', function() {
-                    this.style.borderColor = 'var(--border)';
-                    this.style.boxShadow = 'none';
-                });
-                
-                // Forzar la apertura del datepicker en móviles
-                dateInput.addEventListener('click', function() {
-                    // En móviles, intentar abrir el datepicker nativo
-                    if (this.showPicker && typeof this.showPicker === 'function') {
-                        this.showPicker();
-                    } else {
-                        // Fallback: hacer focus para abrir el datepicker
-                        this.focus();
-                    }
-                });
-                
-                // Añadir evento para validar la fecha seleccionada
-                dateInput.addEventListener('change', function() {
-                    const selectedDate = new Date(this.value);
-                    const today = new Date();
-                    const maxDate = new Date('2024-10-29');
+                // Generar días del calendario
+                for (let i = 0; i < 42; i++) {
+                    const date = new Date(startDate);
+                    date.setDate(startDate.getDate() + i);
                     
-                    if (selectedDate < today) {
-                        alert('La fecha de reapertura no puede ser anterior a hoy');
-                        this.value = '';
-                    } else if (selectedDate > maxDate) {
-                        alert('La fecha de reapertura no puede ser posterior al 29 de octubre de 2024');
-                        this.value = '';
+                    const dayElement = document.createElement('div');
+                    dayElement.className = 'calendar-day';
+                    dayElement.textContent = date.getDate();
+                    
+                    // Verificar si es del mes actual
+                    if (date.getMonth() !== month) {
+                        dayElement.classList.add('other-month');
+                    }
+                    
+                    // Verificar si está deshabilitado
+                    if (isDateDisabled(date)) {
+                        dayElement.classList.add('disabled');
+                    } else {
+                        dayElement.addEventListener('click', () => {
+                            // Remover selección anterior
+                            document.querySelectorAll('.calendar-day.selected').forEach(el => {
+                                el.classList.remove('selected');
+                            });
+                            
+                            // Seleccionar nueva fecha
+                            dayElement.classList.add('selected');
+                            selectedDate = new Date(date);
+                        });
+                    }
+                    
+                    // Verificar si es la fecha seleccionada
+                    if (selectedDate && date.toDateString() === selectedDate.toDateString()) {
+                        dayElement.classList.add('selected');
+                    }
+                    
+                    datePickerCalendar.appendChild(dayElement);
+                }
+            }
+
+            function openDatePicker() {
+                datePickerModal.style.display = 'flex';
+                renderCalendar();
+            }
+
+            function closeDatePicker() {
+                datePickerModal.style.display = 'none';
+            }
+
+            function confirmDateSelection() {
+                if (selectedDate) {
+                    dateInput.value = formatDateForDisplay(selectedDate);
+                    dateInput.setAttribute('data-date', formatDateForInput(selectedDate));
+                    closeDatePicker();
+                }
+            }
+
+            // Event listeners
+            if (openDatePickerBtn) {
+                openDatePickerBtn.addEventListener('click', openDatePicker);
+            }
+
+            if (prevMonthBtn) {
+                prevMonthBtn.addEventListener('click', () => {
+                    currentMonth.setMonth(currentMonth.getMonth() - 1);
+                    renderCalendar();
+                });
+            }
+
+            if (nextMonthBtn) {
+                nextMonthBtn.addEventListener('click', () => {
+                    currentMonth.setMonth(currentMonth.getMonth() + 1);
+                    renderCalendar();
+                });
+            }
+
+            if (cancelDateBtn) {
+                cancelDateBtn.addEventListener('click', closeDatePicker);
+            }
+
+            if (confirmDateBtn) {
+                confirmDateBtn.addEventListener('click', confirmDateSelection);
+            }
+
+            // Cerrar modal al hacer clic fuera
+            if (datePickerModal) {
+                datePickerModal.addEventListener('click', (e) => {
+                    if (e.target === datePickerModal) {
+                        closeDatePicker();
                     }
                 });
             }
