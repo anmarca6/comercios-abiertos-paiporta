@@ -218,11 +218,34 @@
             color: #f59e0b;
         }
 
-        .char-counter.error {
-            color: #ef4444;
-        }
+                 .char-counter.error {
+             color: #ef4444;
+         }
 
-        /* Mapa */
+         /* Teléfono */
+         .phone-input-container {
+             display: flex;
+             gap: var(--space-sm);
+             align-items: center;
+         }
+
+         .phone-code {
+             width: 120px;
+             flex-shrink: 0;
+         }
+
+         .phone-number {
+             flex: 1;
+         }
+
+         .phone-help {
+             font-size: 0.8rem;
+             color: var(--text-secondary);
+             margin-top: 0.25rem;
+             font-style: italic;
+         }
+
+         /* Mapa */
         .map-section {
             margin-top: var(--space-lg);
         }
@@ -521,20 +544,74 @@
 
                                  <div class="form-group">
                                      <label for="businessPhone" class="form-label">Teléfono *</label>
-                                     <input type="tel" id="businessPhone" name="telefono" class="form-input" 
-                                            required placeholder="+34 123 456 789">
+                                     <div class="phone-input-container">
+                                         <select id="countryCode" name="countryCode" class="form-select phone-code" required>
+                                             <option value="+34">🇪🇸 +34</option>
+                                             <option value="+33">🇫🇷 +33</option>
+                                             <option value="+39">🇮🇹 +39</option>
+                                             <option value="+49">🇩🇪 +49</option>
+                                             <option value="+44">🇬🇧 +44</option>
+                                             <option value="+351">🇵🇹 +351</option>
+                                             <option value="+31">🇳🇱 +31</option>
+                                             <option value="+32">🇧🇪 +32</option>
+                                             <option value="+41">🇨🇭 +41</option>
+                                             <option value="+43">🇦🇹 +43</option>
+                                             <option value="+46">🇸🇪 +46</option>
+                                             <option value="+47">🇳🇴 +47</option>
+                                             <option value="+45">🇩🇰 +45</option>
+                                             <option value="+358">🇫🇮 +358</option>
+                                             <option value="+48">🇵🇱 +48</option>
+                                             <option value="+420">🇨🇿 +420</option>
+                                             <option value="+36">🇭🇺 +36</option>
+                                             <option value="+421">🇸🇰 +421</option>
+                                             <option value="+386">🇸🇮 +386</option>
+                                             <option value="+385">🇭🇷 +385</option>
+                                             <option value="+371">🇱🇻 +371</option>
+                                             <option value="+372">🇪🇪 +372</option>
+                                             <option value="+370">🇱🇹 +370</option>
+                                             <option value="+1">🇺🇸 +1</option>
+                                             <option value="+52">🇲🇽 +52</option>
+                                             <option value="+54">🇦🇷 +54</option>
+                                             <option value="+55">🇧🇷 +55</option>
+                                             <option value="+56">🇨🇱 +56</option>
+                                             <option value="+57">🇨🇴 +57</option>
+                                             <option value="+58">🇻🇪 +58</option>
+                                             <option value="+593">🇪🇨 +593</option>
+                                             <option value="+595">🇵🇾 +595</option>
+                                             <option value="+598">🇺🇾 +598</option>
+                                             <option value="+51">🇵🇪 +51</option>
+                                             <option value="+591">🇧🇴 +591</option>
+                                             <option value="+593">🇪🇨 +593</option>
+                                             <option value="+502">🇬🇹 +502</option>
+                                             <option value="+503">🇸🇻 +503</option>
+                                             <option value="+504">🇭🇳 +504</option>
+                                             <option value="+505">🇳🇮 +505</option>
+                                             <option value="+506">🇨🇷 +506</option>
+                                             <option value="+507">🇵🇦 +507</option>
+                                             <option value="+508">🇵🇾 +508</option>
+                                             <option value="+509">🇭🇹 +509</option>
+                                             <option value="+53">🇨🇺 +53</option>
+                                             <option value="+809">🇩🇴 +809</option>
+                                             <option value="+1809">🇩🇴 +1809</option>
+                                             <option value="+1829">🇩🇴 +1829</option>
+                                             <option value="+1849">🇩🇴 +1849</option>
+                                         </select>
+                                         <input type="tel" id="businessPhone" name="telefono" class="form-input phone-number" 
+                                                required placeholder="123 456 789" maxlength="9" pattern="[0-9]{9}">
+                                     </div>
+                                     <div class="phone-help">Introduce solo 9 dígitos sin espacios ni guiones</div>
                                  </div>
 
                                  <div class="form-group">
-                                     <label for="businessHours" class="form-label">Horario</label>
+                                     <label for="businessHours" class="form-label">Horario *</label>
                                      <input type="text" id="businessHours" name="horario" class="form-input" 
-                                            placeholder="Ej: L-V 9:00-18:00, S 9:00-14:00">
+                                            required placeholder="Ej: L-V 9:00-18:00, S 9:00-14:00">
                                  </div>
 
                                  <div class="form-group">
                                      <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
-                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
-                                            class="form-input" required min="2024-10-29">
+                                     <input type="text" id="businessReopenDate" name="fechaReapertura" 
+                                            class="form-input" required placeholder="dd/mm/yyyy" readonly>
                                  </div>
                              </div>
 
@@ -607,8 +684,15 @@
         </div>
     </div>
 
-    <!-- Google Maps API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places"></script>
+         <!-- Datepicker CSS -->
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/css/datepicker.min.css">
+     
+     <!-- Google Maps API -->
+     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places"></script>
+     
+     <!-- Datepicker JS -->
+     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/js/datepicker.min.js"></script>
+     <script src="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/js/locales/es.js"></script>
     
     <script>
         // Variables globales del mapa
@@ -738,43 +822,74 @@
             updateMapStatus('warning', '🗑️ Marcador eliminado. Escribe una dirección o haz clic en el mapa.');
         }
 
-        // Contador de caracteres
-        function updateCharCounter() {
-            const textarea = document.getElementById('businessDescription');
-            const counter = document.getElementById('charCounter');
-            const currentLength = textarea.value.length;
-            const maxLength = 150;
-            
-            counter.textContent = `${currentLength} / ${maxLength} caracteres`;
-            
-            // Cambiar color según el uso
-            counter.className = 'char-counter';
-            if (currentLength > maxLength * 0.8) {
-                counter.classList.add('warning');
-            }
-            if (currentLength > maxLength * 0.95) {
-                counter.classList.add('error');
-            }
-        }
+                 // Contador de caracteres
+         function updateCharCounter() {
+             const textarea = document.getElementById('businessDescription');
+             const counter = document.getElementById('charCounter');
+             const currentLength = textarea.value.length;
+             const maxLength = 150;
+             
+             counter.textContent = `${currentLength} / ${maxLength} caracteres`;
+             
+             // Cambiar color según el uso
+             counter.className = 'char-counter';
+             if (currentLength > maxLength * 0.8) {
+                 counter.classList.add('warning');
+             }
+             if (currentLength > maxLength * 0.95) {
+                 counter.classList.add('error');
+             }
+         }
+
+         // Validación del teléfono
+         function validatePhone() {
+             const phoneInput = document.getElementById('businessPhone');
+             const phoneValue = phoneInput.value.replace(/\D/g, ''); // Solo números
+             
+             if (phoneValue.length > 9) {
+                 phoneInput.value = phoneValue.slice(0, 9);
+             }
+             
+             // Solo permitir números
+             phoneInput.value = phoneValue;
+         }
+
+         // Inicializar selector de fecha
+         function initDatePicker() {
+             const dateInput = document.getElementById('businessReopenDate');
+             
+             // Crear el datepicker
+             const datepicker = new Datepicker(dateInput, {
+                 format: 'dd/mm/yyyy',
+                 language: 'es',
+                 autohide: true,
+                 maxDate: new Date('2024-10-29'),
+                 minDate: new Date(),
+                 todayBtn: true,
+                 clearBtn: true,
+                 todayBtnMode: 1,
+                 clearBtnMode: 1
+             });
+         }
 
         // Manejar envío del formulario
         const handleAddBusinessForm = (e) => {
             e.preventDefault();
             
             const formData = new FormData(e.target);
-            const businessData = {
-                id: Date.now(),
-                nombre: formData.get('nombre'),
-                tipo: formData.get('tipo'),
-                direccion: formData.get('direccion'),
-                telefono: formData.get('telefono'),
-                horario: formData.get('horario'),
-                descripcion: formData.get('descripcion'),
-                fechaReapertura: formData.get('fechaReapertura'),
-                lat: formData.get('lat'),
-                lng: formData.get('lng'),
-                timestamp: new Date().toISOString()
-            };
+                         const businessData = {
+                 id: Date.now(),
+                 nombre: formData.get('nombre'),
+                 tipo: formData.get('tipo'),
+                 direccion: formData.get('direccion'),
+                 telefono: formData.get('countryCode') + ' ' + formData.get('telefono'),
+                 horario: formData.get('horario'),
+                 descripcion: formData.get('descripcion'),
+                 fechaReapertura: formData.get('fechaReapertura'),
+                 lat: formData.get('lat'),
+                 lng: formData.get('lng'),
+                 timestamp: new Date().toISOString()
+             };
 
             // Guardar en localStorage
             const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
@@ -803,19 +918,33 @@
             // Inicializar mapa
             initMap();
 
-            // Configurar contador de caracteres
-            const textarea = document.getElementById('businessDescription');
-            if (textarea) {
-                textarea.addEventListener('input', updateCharCounter);
-                updateCharCounter(); // Inicializar contador
-            }
+                         // Configurar contador de caracteres
+             const textarea = document.getElementById('businessDescription');
+             if (textarea) {
+                 textarea.addEventListener('input', updateCharCounter);
+                 updateCharCounter(); // Inicializar contador
+             }
 
-            // Configurar botones del mapa
-            document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
-            document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
-            document.getElementById('confirmLocationBtn').addEventListener('click', function() {
-                updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
-            });
+             // Configurar validación del teléfono
+             const phoneInput = document.getElementById('businessPhone');
+             if (phoneInput) {
+                 phoneInput.addEventListener('input', validatePhone);
+                 phoneInput.addEventListener('keypress', function(e) {
+                     if (!/[0-9]/.test(e.key)) {
+                         e.preventDefault();
+                     }
+                 });
+             }
+
+             // Inicializar datepicker
+             initDatePicker();
+
+             // Configurar botones del mapa
+             document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
+             document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
+             document.getElementById('confirmLocationBtn').addEventListener('click', function() {
+                 updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
+             });
 
             // Page Transition
             const pageContent = document.querySelector('.page-transition');
