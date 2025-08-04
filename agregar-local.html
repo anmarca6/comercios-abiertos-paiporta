@@ -671,7 +671,7 @@
                     placeMarker(e.latlng);
                 });
                 
-                updateMapStatus('success', '✅ Mapa cargado correctamente. Escribe una dirección o haz clic para colocar el marcador.');
+                // Mapa cargado correctamente, sin mostrar mensaje inicial
             } catch (error) {
                 console.error('Error al inicializar el mapa:', error);
                 updateMapStatus('error', '❌ Error al cargar el mapa. Verifica tu conexión a internet.');
