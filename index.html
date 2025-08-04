@@ -1341,8 +1341,13 @@
         // Cargar comercios
         async function loadComercios() {
             try {
-                const res = await fetch('data/comercios.json');
-                if (!res.ok) throw new Error('No se pudo cargar el fichero de comercios.');
+                // Intentar cargar desde el directorio raíz primero
+                let res = await fetch('comercios.json');
+                if (!res.ok) {
+                    // Si falla, intentar desde el directorio data
+                    res = await fetch('data/comercios.json');
+                    if (!res.ok) throw new Error('No se pudo cargar el fichero de comercios.');
+                }
                 comercios = await res.json();
                 
                 // Cargar locales pendientes del localStorage
