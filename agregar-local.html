@@ -138,7 +138,7 @@
             overflow: hidden;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             border: 1px solid rgba(0, 0, 0, 0.05);
-            max-width: 800px;
+            width: 100%;
             margin: 0 auto;
         }
 
@@ -165,8 +165,8 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: var(--space-lg);
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: var(--space-xl);
             margin-bottom: var(--space-xl);
         }
 
@@ -205,6 +205,139 @@
         .form-textarea {
             resize: vertical;
             min-height: 100px;
+        }
+
+        .char-counter {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-align: right;
+            margin-top: 0.25rem;
+        }
+
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+
+        .char-counter.error {
+            color: #ef4444;
+        }
+
+        /* Mapa */
+        .map-section {
+            margin-top: var(--space-lg);
+        }
+
+        .map-container {
+            width: 100%;
+            height: 400px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid var(--border);
+            position: relative;
+        }
+
+        .map-instructions {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: 8px;
+            margin-bottom: var(--space-md);
+            border: 1px solid var(--border);
+        }
+
+        .map-instructions h4 {
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .map-instructions p {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .map-status {
+            display: flex;
+            align-items: center;
+            gap: var(--space-sm);
+            font-size: 0.9rem;
+            margin-top: var(--space-sm);
+        }
+
+        .map-status.success {
+            color: var(--success);
+        }
+
+        .map-status.warning {
+            color: #f59e0b;
+        }
+
+        .map-status.error {
+            color: #ef4444;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: var(--space-sm);
+            margin-top: var(--space-md);
+            flex-wrap: wrap;
+        }
+
+        .map-btn {
+            padding: 0.5rem 1rem;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            background: white;
+            color: var(--text-primary);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .map-btn:hover {
+            background: var(--background);
+            border-color: var(--primary-solid);
+            color: var(--primary-solid);
+        }
+
+        .map-btn.primary {
+            background: var(--primary-solid);
+            color: white;
+            border-color: var(--primary-solid);
+        }
+
+        .map-btn.primary:hover {
+            background: var(--primary-solid);
+            opacity: 0.9;
+        }
+
+        .coordinates-display {
+            background: var(--background);
+            padding: var(--space-md);
+            border-radius: 8px;
+            margin-top: var(--space-md);
+            border: 1px solid var(--border);
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+
+        .coordinates-display h5 {
+            margin-bottom: var(--space-sm);
+            color: var(--text-primary);
+        }
+
+        .coordinates-display p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .coordinates-values {
+            background: white;
+            padding: var(--space-sm);
+            border-radius: 4px;
+            border: 1px solid var(--border);
+            font-family: monospace;
+            color: var(--text-primary);
         }
 
         .form-actions {
@@ -374,8 +507,9 @@
                                 <div class="form-group">
                                     <label for="businessDescription" class="form-label">Descripción *</label>
                                     <textarea id="businessDescription" name="descripcion" class="form-textarea" required 
-                                              rows="3" maxlength="200" 
+                                              rows="3" maxlength="150" 
                                               placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
+                                    <div class="char-counter" id="charCounter">0 / 150 caracteres</div>
                                 </div>
                             </div>
 
@@ -385,6 +519,41 @@
                                     <label for="businessAddress" class="form-label">Dirección *</label>
                                     <input type="text" id="businessAddress" name="direccion" class="form-input" 
                                            required placeholder="Ej: Calle Mayor, 1, Paiporta">
+                                    
+                                    <!-- Sección del mapa -->
+                                    <div class="map-section">
+                                        <div class="map-instructions">
+                                            <h4>📍 Ubicación del negocio</h4>
+                                            <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente.</p>
+                                            <div class="map-status" id="mapStatus">
+                                                <span>⏳ Esperando dirección...</span>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="map-container" id="mapContainer">
+                                            <div id="map" style="width: 100%; height: 100%;"></div>
+                                        </div>
+                                        
+                                        <div class="map-controls">
+                                            <button type="button" class="map-btn" id="searchLocationBtn">
+                                                🔍 Buscar en mapa
+                                            </button>
+                                            <button type="button" class="map-btn" id="clearMarkerBtn">
+                                                🗑️ Limpiar marcador
+                                            </button>
+                                            <button type="button" class="map-btn primary" id="confirmLocationBtn" style="display: none;">
+                                                ✅ Confirmar ubicación
+                                            </button>
+                                        </div>
+                                        
+                                        <div class="coordinates-display" id="coordinatesDisplay" style="display: none;">
+                                            <h5>📍 Coordenadas guardadas</h5>
+                                            <p>Estas coordenadas se guardarán con tu negocio:</p>
+                                            <div class="coordinates-values" id="coordinatesValues">
+                                                Latitud: -- | Longitud: --
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div class="form-group">
@@ -404,6 +573,10 @@
                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
                                            class="form-input" required min="2024-10-29">
                                 </div>
+                                
+                                <!-- Campos ocultos para coordenadas -->
+                                <input type="hidden" id="businessLat" name="lat" value="">
+                                <input type="hidden" id="businessLng" name="lng" value="">
                             </div>
                         </div>
 
@@ -427,7 +600,156 @@
         </div>
     </div>
 
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places"></script>
+    
     <script>
+        // Variables globales del mapa
+        let map;
+        let marker;
+        let geocoder;
+        let currentAddress = '';
+        let selectedCoordinates = null;
+
+        // Inicializar mapa
+        function initMap() {
+            // Coordenadas de Paiporta, Valencia
+            const paiportaCoords = { lat: 39.4283, lng: -0.4175 };
+            
+            map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 15,
+                center: paiportaCoords,
+                mapTypeControl: false,
+                streetViewControl: false,
+                fullscreenControl: false,
+                styles: [
+                    {
+                        featureType: "poi",
+                        elementType: "labels",
+                        stylers: [{ visibility: "off" }]
+                    }
+                ]
+            });
+
+            geocoder = new google.maps.Geocoder();
+
+            // Permitir clic en el mapa para colocar marcador
+            map.addListener('click', function(event) {
+                placeMarker(event.latLng);
+            });
+        }
+
+        // Colocar marcador en el mapa
+        function placeMarker(latLng) {
+            if (marker) {
+                marker.setMap(null);
+            }
+
+            marker = new google.maps.Marker({
+                position: latLng,
+                map: map,
+                draggable: true,
+                title: 'Ubicación del negocio'
+            });
+
+            // Centrar mapa en el marcador
+            map.setCenter(latLng);
+            map.setZoom(17);
+
+            // Guardar coordenadas
+            selectedCoordinates = {
+                lat: latLng.lat(),
+                lng: latLng.lng()
+            };
+
+            // Actualizar campos ocultos
+            document.getElementById('businessLat').value = selectedCoordinates.lat;
+            document.getElementById('businessLng').value = selectedCoordinates.lng;
+
+            // Mostrar coordenadas
+            updateCoordinatesDisplay();
+            
+            // Mostrar botón de confirmar
+            document.getElementById('confirmLocationBtn').style.display = 'inline-flex';
+            
+            // Actualizar estado
+            updateMapStatus('success', '✅ Ubicación seleccionada. Puedes arrastrar el marcador si necesitas ajustarlo.');
+        }
+
+        // Buscar dirección en el mapa
+        function searchAddress() {
+            const address = document.getElementById('businessAddress').value.trim();
+            
+            if (!address) {
+                updateMapStatus('error', '❌ Por favor, escribe una dirección primero.');
+                return;
+            }
+
+            updateMapStatus('warning', '🔍 Buscando dirección...');
+
+            geocoder.geocode({ address: address + ', Paiporta, Valencia, Spain' }, function(results, status) {
+                if (status === 'OK') {
+                    const location = results[0].geometry.location;
+                    placeMarker(location);
+                    updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
+                } else {
+                    updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+                    // Centrar en Paiporta si no encuentra la dirección
+                    map.setCenter({ lat: 39.4283, lng: -0.4175 });
+                    map.setZoom(15);
+                }
+            });
+        }
+
+        // Actualizar estado del mapa
+        function updateMapStatus(type, message) {
+            const statusElement = document.getElementById('mapStatus');
+            statusElement.className = `map-status ${type}`;
+            statusElement.innerHTML = `<span>${message}</span>`;
+        }
+
+        // Actualizar display de coordenadas
+        function updateCoordinatesDisplay() {
+            if (selectedCoordinates) {
+                document.getElementById('coordinatesDisplay').style.display = 'block';
+                document.getElementById('coordinatesValues').textContent = 
+                    `Latitud: ${selectedCoordinates.lat.toFixed(6)} | Longitud: ${selectedCoordinates.lng.toFixed(6)}`;
+            }
+        }
+
+        // Limpiar marcador
+        function clearMarker() {
+            if (marker) {
+                marker.setMap(null);
+                marker = null;
+            }
+            selectedCoordinates = null;
+            document.getElementById('businessLat').value = '';
+            document.getElementById('businessLng').value = '';
+            document.getElementById('coordinatesDisplay').style.display = 'none';
+            document.getElementById('confirmLocationBtn').style.display = 'none';
+            updateMapStatus('warning', '🗑️ Marcador eliminado. Escribe una dirección o haz clic en el mapa.');
+        }
+
+        // Contador de caracteres
+        function updateCharCounter() {
+            const textarea = document.getElementById('businessDescription');
+            const counter = document.getElementById('charCounter');
+            const currentLength = textarea.value.length;
+            const maxLength = 150;
+            
+            counter.textContent = `${currentLength} / ${maxLength} caracteres`;
+            
+            // Cambiar color según el uso
+            counter.className = 'char-counter';
+            if (currentLength > maxLength * 0.8) {
+                counter.classList.add('warning');
+            }
+            if (currentLength > maxLength * 0.95) {
+                counter.classList.add('error');
+            }
+        }
+
         // Manejar envío del formulario
         const handleAddBusinessForm = (e) => {
             e.preventDefault();
@@ -442,6 +764,8 @@
                 horario: formData.get('horario'),
                 descripcion: formData.get('descripcion'),
                 fechaReapertura: formData.get('fechaReapertura'),
+                lat: formData.get('lat'),
+                lng: formData.get('lng'),
                 timestamp: new Date().toISOString()
             };
 
@@ -468,6 +792,23 @@
             if (form) {
                 form.addEventListener('submit', handleAddBusinessForm);
             }
+
+            // Inicializar mapa
+            initMap();
+
+            // Configurar contador de caracteres
+            const textarea = document.getElementById('businessDescription');
+            if (textarea) {
+                textarea.addEventListener('input', updateCharCounter);
+                updateCharCounter(); // Inicializar contador
+            }
+
+            // Configurar botones del mapa
+            document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
+            document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
+            document.getElementById('confirmLocationBtn').addEventListener('click', function() {
+                updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
+            });
 
             // Page Transition
             const pageContent = document.querySelector('.page-transition');
