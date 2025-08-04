@@ -232,7 +232,7 @@
 
         .map-container {
             width: 100%;
-            height: 400px;
+            height: 500px;
             border-radius: 12px;
             overflow: hidden;
             border: 2px solid var(--border);
@@ -299,6 +299,19 @@
             background: var(--primary-solid);
             color: white;
             border-color: var(--primary-solid);
+        }
+
+        .map-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: var(--border);
+            color: var(--text-secondary);
+        }
+
+        .map-btn.primary:disabled {
+            background: var(--border);
+            color: var(--text-secondary);
+            border-color: var(--border);
         }
 
         .coordinates-display {
@@ -468,21 +481,7 @@
                                     <div class="char-counter" id="charCounter">0 / 150 caracteres</div>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="businessImage" class="form-label">Imagen del negocio (opcional)</label>
-                                    <div class="image-upload-container">
-                                        <input type="file" id="businessImage" name="imagen" class="form-input" 
-                                               accept="image/*" capture="environment">
-                                        <div class="image-preview" id="imagePreview" style="display: none;">
-                                            <img id="previewImg" src="" alt="Vista previa">
-                                            <button type="button" class="remove-image-btn" id="removeImageBtn">🗑️ Eliminar</button>
-                                        </div>
-                                        <div class="image-help">
-                                            <p>📱 Puedes tomar una foto con la cámara o seleccionar una imagen de tu galería</p>
-                                            <p>📏 Tamaño máximo: 2MB | Formatos: JPG, PNG, WebP</p>
-                                        </div>
-                                    </div>
-                                </div>
+
 
                                 <div class="form-group">
                                     <label for="businessPhone" class="form-label">Teléfono *</label>
@@ -552,6 +551,22 @@
                                         Selecciona una fecha entre hoy y el 29 de octubre de 2024
                                     </div>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="businessImage" class="form-label">Imagen del negocio (opcional)</label>
+                                    <div class="image-upload-container">
+                                        <input type="file" id="businessImage" name="imagen" class="form-input" 
+                                               accept="image/*" capture="environment">
+                                        <div class="image-preview" id="imagePreview" style="display: none;">
+                                            <img id="previewImg" src="" alt="Vista previa">
+                                            <button type="button" class="remove-image-btn" id="removeImageBtn">🗑️ Eliminar</button>
+                                        </div>
+                                        <div class="image-help">
+                                            <p>📱 Puedes tomar una foto con la cámara o seleccionar una imagen de tu galería</p>
+                                            <p>📏 Tamaño máximo: 2MB | Formatos: JPG, PNG, WebP</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <!-- Ubicación -->
@@ -575,25 +590,19 @@
                                             <div id="map" style="width: 100%; height: 100%;"></div>
                                         </div>
                                         
-                                        <div class="map-controls">
-                                            <button type="button" class="map-btn" id="searchLocationBtn">
-                                                🔍 Buscar en mapa
-                                            </button>
-                                            <button type="button" class="map-btn" id="clearMarkerBtn">
-                                                🗑️ Limpiar marcador
-                                            </button>
-                                            <button type="button" class="map-btn primary" id="confirmLocationBtn" style="display: none;">
-                                                ✅ Confirmar ubicación
-                                            </button>
-                                        </div>
+                                                                                 <div class="map-controls">
+                                             <button type="button" class="map-btn" id="searchLocationBtn">
+                                                 🔍 Buscar en mapa
+                                             </button>
+                                             <button type="button" class="map-btn" id="clearMarkerBtn">
+                                                 🗑️ Limpiar marcador
+                                             </button>
+                                             <button type="button" class="map-btn primary" id="confirmLocationBtn" disabled>
+                                                 ✅ Confirmar ubicación
+                                             </button>
+                                         </div>
                                         
-                                        <div class="coordinates-display" id="coordinatesDisplay" style="display: none;">
-                                            <h5>📍 Coordenadas guardadas</h5>
-                                            <p>Estas coordenadas se guardarán con tu negocio:</p>
-                                            <div class="coordinates-values" id="coordinatesValues">
-                                                Latitud: -- | Longitud: --
-                                            </div>
-                                        </div>
+                                        
                                     </div>
                                 </div>
                                 
@@ -697,7 +706,7 @@
             document.getElementById('businessLng').value = selectedCoordinates.lng;
 
             updateCoordinatesDisplay();
-            document.getElementById('confirmLocationBtn').style.display = 'inline-flex';
+            document.getElementById('confirmLocationBtn').disabled = false;
             updateMapStatus('success', '✅ Ubicación seleccionada. Puedes arrastrar el marcador si necesitas ajustarlo.');
 
             // Evento de arrastre del marcador
@@ -754,10 +763,10 @@
 
         // Actualizar display de coordenadas
         function updateCoordinatesDisplay() {
+            // Las coordenadas se guardan internamente pero no se muestran al usuario
             if (selectedCoordinates) {
-                document.getElementById('coordinatesDisplay').style.display = 'block';
-                document.getElementById('coordinatesValues').textContent = 
-                    `Latitud: ${selectedCoordinates.lat.toFixed(6)} | Longitud: ${selectedCoordinates.lng.toFixed(6)}`;
+                // Coordenadas guardadas internamente
+                console.log(`Coordenadas guardadas: ${selectedCoordinates.lat.toFixed(6)}, ${selectedCoordinates.lng.toFixed(6)}`);
             }
         }
 
@@ -770,8 +779,7 @@
             selectedCoordinates = null;
             document.getElementById('businessLat').value = '';
             document.getElementById('businessLng').value = '';
-            document.getElementById('coordinatesDisplay').style.display = 'none';
-            document.getElementById('confirmLocationBtn').style.display = 'none';
+            document.getElementById('confirmLocationBtn').disabled = true;
             updateMapStatus('warning', '🗑️ Marcador eliminado. Escribe una dirección o haz clic en el mapa.');
         }
 
