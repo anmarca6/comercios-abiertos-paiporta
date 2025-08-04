@@ -429,8 +429,8 @@
             <a href="index.html" class="back-button">
                 ← Volver al directorio
             </a>
-            <h1>🏪 Agregar mi local</h1>
-            <p class="header-subtitle">Completa todos los campos para añadir tu negocio al directorio</p>
+            <h1>🏪 Añadir mi local</h1>
+            <p class="header-subtitle">Completa todos los campos para añadir tu negocio al directorio, son solo 2 minutos</p>
         </div>
     </div>
 
@@ -580,7 +580,7 @@
                                     <div class="map-section">
                                         <div class="map-instructions">
                                             <h4>📍 Ubicación del negocio</h4>
-                                            <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente.</p>
+                                            <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente</p>
                                             <div class="map-status" id="mapStatus">
                                                 <span>⏳ Esperando dirección...</span>
                                             </div>
@@ -707,7 +707,7 @@
 
             updateCoordinatesDisplay();
             document.getElementById('confirmLocationBtn').disabled = false;
-            updateMapStatus('success', '✅ Ubicación seleccionada. Puedes arrastrar el marcador si necesitas ajustarlo.');
+            updateMapStatus('warning', '📍 Marcador colocado. Haz clic en "Confirmar ubicación" para guardar.');
 
             // Evento de arrastre del marcador
             marker.on('dragend', function(e) {
@@ -1151,9 +1151,10 @@
                 // Configurar botones del mapa
                 document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
                 document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
-                document.getElementById('confirmLocationBtn').addEventListener('click', function() {
-                    updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
-                });
+                                 document.getElementById('confirmLocationBtn').addEventListener('click', function() {
+                     updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
+                     this.disabled = true;
+                 });
             } else {
                 // Fallback si Leaflet no está disponible
                 document.getElementById('map').innerHTML = `
