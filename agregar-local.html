@@ -481,7 +481,7 @@
                                     <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
                                            class="form-input" required min="2024-01-01" max="2024-10-29"
-                                           style="position: relative; z-index: 10;">
+                                           style="position: relative; z-index: 10; cursor: pointer;">
                                     <div class="date-help" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                         Selecciona una fecha entre hoy y el 29 de octubre de 2024
                                     </div>
@@ -560,8 +560,11 @@
     <!-- Vercel Analytics -->
     <script defer src="/_vercel/insights/script.js"></script>
     
+    <!-- EmailJS -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    
     <!-- Google Maps API -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyC2P9b7JqXqXqXqXqXqXqXqXqXqXqXqXqXq&libraries=places&callback=initMap"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap"></script>
     
 
     
@@ -730,38 +733,183 @@
             return `${day}/${month}/${year}`;
         }
 
-        // Manejar envío del formulario
-        const handleAddBusinessForm = (e) => {
-            e.preventDefault();
+        // Validación completa del formulario
+        function validateForm() {
+            const errors = [];
             
-            const formData = new FormData(e.target);
-            const businessData = {
-                id: Date.now(),
-                nombre: formData.get('nombre'),
-                tipo: formData.get('tipo'),
-                direccion: formData.get('direccion'),
-                telefono: formData.get('countryCode') + ' ' + formData.get('telefono'),
-                horario: formData.get('horario'),
-                descripcion: formData.get('descripcion'),
-                fechaReapertura: formData.get('fechaReapertura'),
-                lat: formData.get('lat'),
-                lng: formData.get('lng'),
-                timestamp: new Date().toISOString()
-            };
+            // Validar nombre
+            const nombre = document.getElementById('businessName').value.trim();
+            if (!nombre || nombre.length < 3) {
+                errors.push('El nombre debe tener al menos 3 caracteres');
+            }
+            
+            // Validar tipo
+            const tipo = document.getElementById('businessType').value;
+            if (!tipo) {
+                errors.push('Debes seleccionar una categoría');
+            }
+            
+            // Validar descripción
+            const descripcion = document.getElementById('businessDescription').value.trim();
+            if (!descripcion || descripcion.length < 10) {
+                errors.push('La descripción debe tener al menos 10 caracteres');
+            }
+            
+            // Validar teléfono
+            const telefono = document.getElementById('businessPhone').value.trim();
+            if (!telefono || telefono.length !== 9) {
+                errors.push('El teléfono debe tener exactamente 9 dígitos');
+            }
+            
+            // Validar horario
+            const horario = document.getElementById('businessHours').value.trim();
+            if (!horario) {
+                errors.push('Debes especificar el horario');
+            }
+            
+            // Validar fecha de reapertura
+            const fechaReapertura = document.getElementById('businessReopenDate').value;
+            if (!fechaReapertura) {
+                errors.push('Debes seleccionar una fecha de reapertura');
+            } else {
+                const selectedDate = new Date(fechaReapertura);
+                const today = new Date();
+                const maxDate = new Date('2024-10-29');
+                
+                if (selectedDate < today) {
+                    errors.push('La fecha de reapertura no puede ser anterior a hoy');
+                } else if (selectedDate > maxDate) {
+                    errors.push('La fecha de reapertura no puede ser posterior al 29 de octubre de 2024');
+                }
+            }
+            
+            // Validar dirección
+            const direccion = document.getElementById('businessAddress').value.trim();
+            if (!direccion) {
+                errors.push('Debes especificar la dirección');
+            }
+            
+            return errors;
+        }
 
-            const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
-            pendingBusinesses.push(businessData);
-            localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
-
-            const formContent = document.querySelector('.form-content');
-            formContent.innerHTML = `
-                <div class="success-message">
-                    <div class="success-icon">✅</div>
-                    <h3 class="success-title">¡Local agregado correctamente!</h3>
-                    <p class="success-description">Tu negocio ha sido añadido al directorio. Aparecerá en la lista una vez sea revisado.</p>
-                    <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+        // Mostrar errores de validación
+        function showValidationErrors(errors) {
+            const errorHtml = `
+                <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c33;">
+                    <h4 style="margin-bottom: 0.5rem;">❌ Errores de validación:</h4>
+                    <ul style="margin: 0; padding-left: 1.5rem;">
+                        ${errors.map(error => `<li>${error}</li>`).join('')}
+                    </ul>
                 </div>
             `;
+            
+            const formContent = document.querySelector('.form-content');
+            const form = document.getElementById('addBusinessForm');
+            formContent.insertBefore(document.createElement('div').innerHTML = errorHtml, form);
+        }
+
+        // Inicializar EmailJS
+        function initEmailJS() {
+            emailjs.init("YOUR_USER_ID"); // Reemplazar con tu User ID de EmailJS
+        }
+
+        // Enviar correo electrónico
+        function sendEmail(businessData) {
+            const templateParams = {
+                to_name: "Administrador",
+                from_name: businessData.nombre,
+                business_name: businessData.nombre,
+                business_type: businessData.tipo,
+                business_address: businessData.direccion,
+                business_phone: businessData.telefono,
+                business_hours: businessData.horario,
+                business_description: businessData.descripcion,
+                business_reopen_date: businessData.fechaReapertura,
+                business_coordinates: `${businessData.lat}, ${businessData.lng}`,
+                message: `Nuevo negocio registrado: ${businessData.nombre}`
+            };
+
+            return emailjs.send("YOUR_SERVICE_ID", "YOUR_TEMPLATE_ID", templateParams);
+        }
+
+        // Manejar envío del formulario
+        const handleAddBusinessForm = async (e) => {
+            e.preventDefault();
+            
+            // Limpiar errores anteriores
+            const existingErrors = document.querySelector('.validation-errors');
+            if (existingErrors) {
+                existingErrors.remove();
+            }
+            
+            // Validar formulario
+            const errors = validateForm();
+            if (errors.length > 0) {
+                showValidationErrors(errors);
+                return;
+            }
+            
+            // Mostrar estado de envío
+            const submitBtn = document.querySelector('.btn-primary');
+            const originalText = submitBtn.innerHTML;
+            submitBtn.innerHTML = '<span>⏳</span><span>Enviando...</span>';
+            submitBtn.disabled = true;
+            
+            try {
+                const formData = new FormData(e.target);
+                const businessData = {
+                    id: Date.now(),
+                    nombre: formData.get('nombre').trim(),
+                    tipo: formData.get('tipo'),
+                    direccion: formData.get('direccion').trim(),
+                    telefono: formData.get('countryCode') + ' ' + formData.get('telefono'),
+                    horario: formData.get('horario').trim(),
+                    descripcion: formData.get('descripcion').trim(),
+                    fechaReapertura: formData.get('fechaReapertura'),
+                    lat: formData.get('lat') || '0',
+                    lng: formData.get('lng') || '0',
+                    timestamp: new Date().toISOString()
+                };
+
+                // Guardar en localStorage como respaldo
+                const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
+                pendingBusinesses.push(businessData);
+                localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
+
+                // Enviar correo electrónico
+                await sendEmail(businessData);
+
+                // Mostrar mensaje de éxito
+                const formContent = document.querySelector('.form-content');
+                formContent.innerHTML = `
+                    <div class="success-message">
+                        <div class="success-icon">✅</div>
+                        <h3 class="success-title">¡Información enviada correctamente!</h3>
+                        <p class="success-description">Tu negocio ha sido registrado y se ha enviado un correo al administrador para su validación. Aparecerá en el directorio una vez sea revisado.</p>
+                        <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+                    </div>
+                `;
+                
+            } catch (error) {
+                console.error('Error al enviar:', error);
+                
+                // Restaurar botón
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+                
+                // Mostrar error
+                const errorHtml = `
+                    <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c33;">
+                        <h4 style="margin-bottom: 0.5rem;">❌ Error al enviar</h4>
+                        <p>No se pudo enviar la información. Por favor, inténtalo de nuevo más tarde.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Los datos se han guardado localmente como respaldo.</p>
+                    </div>
+                `;
+                
+                const formContent = document.querySelector('.form-content');
+                const form = document.getElementById('addBusinessForm');
+                formContent.insertBefore(document.createElement('div').innerHTML = errorHtml, form);
+            }
         };
 
         // Configurar formulario
@@ -794,9 +942,20 @@
                 dateInput.min = today;
                 dateInput.max = '2024-10-29';
                 
-                // Añadir evento para mostrar el datepicker
+                // Mejorar la experiencia del datepicker
+                dateInput.addEventListener('focus', function() {
+                    this.style.borderColor = 'var(--primary-solid)';
+                    this.style.boxShadow = '0 0 0 3px rgba(102, 126, 234, 0.1)';
+                });
+                
+                dateInput.addEventListener('blur', function() {
+                    this.style.borderColor = 'var(--border)';
+                    this.style.boxShadow = 'none';
+                });
+                
+                // Añadir evento para mostrar el datepicker en móviles
                 dateInput.addEventListener('click', function() {
-                    if (this.showPicker) {
+                    if (this.showPicker && typeof this.showPicker === 'function') {
                         this.showPicker();
                     }
                 });
@@ -815,6 +974,13 @@
                         this.value = '';
                     }
                 });
+            }
+            
+            // Inicializar EmailJS
+            try {
+                initEmailJS();
+            } catch (error) {
+                console.warn('EmailJS no está configurado:', error);
             }
 
             // Verificar si Google Maps está disponible
