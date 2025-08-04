@@ -511,80 +511,80 @@
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="businessDescription" class="form-label">Descripción *</label>
-                                    <textarea id="businessDescription" name="descripcion" class="form-textarea" required 
-                                              rows="3" maxlength="150" 
-                                              placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
-                                    <div class="char-counter" id="charCounter">0 / 150 caracteres</div>
-                                </div>
-                            </div>
+                                                                 <div class="form-group">
+                                     <label for="businessDescription" class="form-label">Descripción *</label>
+                                     <textarea id="businessDescription" name="descripcion" class="form-textarea" required 
+                                               rows="3" maxlength="150" 
+                                               placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
+                                     <div class="char-counter" id="charCounter">0 / 150 caracteres</div>
+                                 </div>
 
-                            <!-- Contacto -->
-                            <div>
-                                <div class="form-group">
-                                    <label for="businessAddress" class="form-label">Dirección *</label>
-                                    <input type="text" id="businessAddress" name="direccion" class="form-input" 
-                                           required placeholder="Ej: Calle Mayor, 1, Paiporta">
-                                    
-                                    <!-- Sección del mapa -->
-                                    <div class="map-section">
-                                        <div class="map-instructions">
-                                            <h4>📍 Ubicación del negocio</h4>
-                                            <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente.</p>
-                                            <div class="map-status" id="mapStatus">
-                                                <span>⏳ Esperando dirección...</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="map-container" id="mapContainer">
-                                            <div id="map" style="width: 100%; height: 100%;"></div>
-                                        </div>
-                                        
-                                        <div class="map-controls">
-                                            <button type="button" class="map-btn" id="searchLocationBtn">
-                                                🔍 Buscar en mapa
-                                            </button>
-                                            <button type="button" class="map-btn" id="clearMarkerBtn">
-                                                🗑️ Limpiar marcador
-                                            </button>
-                                            <button type="button" class="map-btn primary" id="confirmLocationBtn" style="display: none;">
-                                                ✅ Confirmar ubicación
-                                            </button>
-                                        </div>
-                                        
-                                        <div class="coordinates-display" id="coordinatesDisplay" style="display: none;">
-                                            <h5>📍 Coordenadas guardadas</h5>
-                                            <p>Estas coordenadas se guardarán con tu negocio:</p>
-                                            <div class="coordinates-values" id="coordinatesValues">
-                                                Latitud: -- | Longitud: --
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                 <div class="form-group">
+                                     <label for="businessPhone" class="form-label">Teléfono *</label>
+                                     <input type="tel" id="businessPhone" name="telefono" class="form-input" 
+                                            required placeholder="+34 123 456 789">
+                                 </div>
 
-                                <div class="form-group">
-                                    <label for="businessPhone" class="form-label">Teléfono *</label>
-                                    <input type="tel" id="businessPhone" name="telefono" class="form-input" 
-                                           required placeholder="+34 123 456 789">
-                                </div>
+                                 <div class="form-group">
+                                     <label for="businessHours" class="form-label">Horario</label>
+                                     <input type="text" id="businessHours" name="horario" class="form-input" 
+                                            placeholder="Ej: L-V 9:00-18:00, S 9:00-14:00">
+                                 </div>
 
-                                <div class="form-group">
-                                    <label for="businessHours" class="form-label">Horario</label>
-                                    <input type="text" id="businessHours" name="horario" class="form-input" 
-                                           placeholder="Ej: L-V 9:00-18:00, S 9:00-14:00">
-                                </div>
+                                 <div class="form-group">
+                                     <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
+                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
+                                            class="form-input" required min="2024-10-29">
+                                 </div>
+                             </div>
 
-                                <div class="form-group">
-                                    <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
-                                    <input type="date" id="businessReopenDate" name="fechaReapertura" 
-                                           class="form-input" required min="2024-10-29">
-                                </div>
-                                
-                                <!-- Campos ocultos para coordenadas -->
-                                <input type="hidden" id="businessLat" name="lat" value="">
-                                <input type="hidden" id="businessLng" name="lng" value="">
-                            </div>
+                             <!-- Ubicación -->
+                             <div>
+                                 <div class="form-group">
+                                     <label for="businessAddress" class="form-label">Dirección *</label>
+                                     <input type="text" id="businessAddress" name="direccion" class="form-input" 
+                                            required placeholder="Ej: Calle Mayor, 1, Paiporta">
+                                     
+                                     <!-- Sección del mapa -->
+                                     <div class="map-section">
+                                         <div class="map-instructions">
+                                             <h4>📍 Ubicación del negocio</h4>
+                                             <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente.</p>
+                                             <div class="map-status" id="mapStatus">
+                                                 <span>⏳ Esperando dirección...</span>
+                                             </div>
+                                         </div>
+                                         
+                                         <div class="map-container" id="mapContainer">
+                                             <div id="map" style="width: 100%; height: 100%;"></div>
+                                         </div>
+                                         
+                                         <div class="map-controls">
+                                             <button type="button" class="map-btn" id="searchLocationBtn">
+                                                 🔍 Buscar en mapa
+                                             </button>
+                                             <button type="button" class="map-btn" id="clearMarkerBtn">
+                                                 🗑️ Limpiar marcador
+                                             </button>
+                                             <button type="button" class="map-btn primary" id="confirmLocationBtn" style="display: none;">
+                                                 ✅ Confirmar ubicación
+                                             </button>
+                                         </div>
+                                         
+                                         <div class="coordinates-display" id="coordinatesDisplay" style="display: none;">
+                                             <h5>📍 Coordenadas guardadas</h5>
+                                             <p>Estas coordenadas se guardarán con tu negocio:</p>
+                                             <div class="coordinates-values" id="coordinatesValues">
+                                                 Latitud: -- | Longitud: --
+                                             </div>
+                                         </div>
+                                     </div>
+                                 </div>
+                                 
+                                 <!-- Campos ocultos para coordenadas -->
+                                 <input type="hidden" id="businessLat" name="lat" value="">
+                                 <input type="hidden" id="businessLng" name="lng" value="">
+                             </div>
                         </div>
 
                         <div class="form-actions">
