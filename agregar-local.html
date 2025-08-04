@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agregar mi local - Comercios Paiporta</title>
-    <meta name="description" content="Añade tu negocio al directorio de comercios de Paiporta. Ayuda en la recuperación comercial post-DANA.">
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,7 +14,6 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/vanillajs-datepicker@1.3.4/css/datepicker.min.css">
     
     <style>
-        /* Variables CSS */
         :root {
             --primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
             --primary-solid: #1e40af;
@@ -32,7 +30,6 @@
             --font-display: 'Poppins', sans-serif;
         }
 
-        /* Reset y base */
         * {
             margin: 0;
             padding: 0;
@@ -44,52 +41,19 @@
             background: var(--background);
             color: var(--text-primary);
             line-height: 1.6;
-            overflow-x: hidden;
         }
 
-        /* Tipografía */
-        h1, h2, h3, h4, h5, h6 {
-            font-family: var(--font-display);
-            font-weight: 700;
-            line-height: 1.2;
-        }
-
-        h1 { font-size: 2.5rem; }
-        h2 { font-size: 2rem; }
-        h3 { font-size: 1.5rem; }
-        h4 { font-size: 1.25rem; }
-
-        /* Contenedores */
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0 var(--space-lg);
         }
 
-        /* Header */
         .header {
             background: var(--primary);
             color: white;
             padding: var(--space-2xl) 0;
             text-align: center;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(180deg); }
         }
 
         .header h1 {
@@ -97,44 +61,27 @@
             font-size: clamp(2rem, 5vw, 3rem);
             font-weight: 700;
             margin-bottom: var(--space-lg);
-            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            position: relative;
-            z-index: 1;
         }
 
         .header-subtitle {
             font-size: 1.1rem;
             opacity: 0.9;
             font-weight: 300;
-            position: relative;
-            z-index: 1;
         }
 
-        /* Back button */
         .back-button {
             display: inline-flex;
             align-items: center;
-            gap: var(--space-sm);
             color: white;
             text-decoration: none;
             font-weight: 500;
-            transition: all 0.3s ease;
             margin-bottom: var(--space-lg);
-            position: relative;
-            z-index: 1;
         }
 
-        .back-button:hover {
-            opacity: 0.8;
-            transform: translateX(-2px);
-        }
-
-        /* Contenido principal */
         .main-content {
             padding: var(--space-2xl) 0;
         }
 
-        /* Formulario */
         .form-container {
             background: white;
             border-radius: 20px;
@@ -200,15 +147,6 @@
             margin-top: 0.25rem;
         }
 
-        .char-counter.warning {
-            color: #f59e0b;
-        }
-
-        .char-counter.error {
-            color: #ef4444;
-        }
-
-        /* Teléfono */
         .phone-input-container {
             display: flex;
             gap: var(--space-sm);
@@ -231,7 +169,6 @@
             font-style: italic;
         }
 
-        /* Mapa */
         .map-section {
             margin-top: var(--space-lg);
         }
@@ -273,17 +210,9 @@
             margin-top: var(--space-sm);
         }
 
-        .map-status.success {
-            color: var(--success);
-        }
-
-        .map-status.warning {
-            color: #f59e0b;
-        }
-
-        .map-status.error {
-            color: #ef4444;
-        }
+        .map-status.success { color: var(--success); }
+        .map-status.warning { color: #f59e0b; }
+        .map-status.error { color: #ef4444; }
 
         .map-controls {
             display: flex;
@@ -315,11 +244,6 @@
             border-color: var(--primary-solid);
         }
 
-        .map-btn.primary:hover {
-            background: var(--primary-solid);
-            opacity: 0.9;
-        }
-
         .coordinates-display {
             background: var(--background);
             padding: var(--space-md);
@@ -328,16 +252,6 @@
             border: 1px solid var(--border);
             font-family: monospace;
             font-size: 0.9rem;
-        }
-
-        .coordinates-display h5 {
-            margin-bottom: var(--space-sm);
-            color: var(--text-primary);
-        }
-
-        .coordinates-display p {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-sm);
         }
 
         .coordinates-values {
@@ -393,13 +307,6 @@
             color: var(--primary-solid);
         }
 
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-            transform: none !important;
-        }
-
-        /* Success message */
         .success-message {
             text-align: center;
             padding: var(--space-2xl);
@@ -422,7 +329,6 @@
             margin-bottom: var(--space-lg);
         }
 
-        /* Footer */
         .footer {
             background: var(--text-primary);
             color: white;
@@ -431,16 +337,7 @@
             margin-top: var(--space-xl);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
-            .container {
-                padding: 0 var(--space-md);
-            }
-            
-            .header {
-                padding: var(--space-xl) 0;
-            }
-            
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -454,18 +351,6 @@
                 justify-content: center;
             }
         }
-
-        /* Page Transition */
-        .page-transition {
-            opacity: 0;
-            transform: translateY(20px);
-            transition: opacity 0.6s ease, transform 0.6s ease;
-        }
-
-        .page-transition.loaded {
-            opacity: 1;
-            transform: translateY(0);
-        }
     </style>
 </head>
 <body>
@@ -475,11 +360,11 @@
                 ← Volver al directorio
             </a>
             <h1>🏪 Agregar mi local</h1>
-            <p class="header-subtitle">Completa todos los campos para añadir tu negocio al directorio (v3.0)</p>
+            <p class="header-subtitle">Completa todos los campos para añadir tu negocio al directorio</p>
         </div>
     </div>
 
-    <main class="main-content page-transition">
+    <main class="main-content">
         <div class="container">
             <div class="form-container">
                 <div class="form-content">
@@ -673,12 +558,10 @@
         let map;
         let marker;
         let geocoder;
-        let currentAddress = '';
         let selectedCoordinates = null;
 
         // Inicializar mapa
         function initMap() {
-            // Coordenadas de Paiporta, Valencia
             const paiportaCoords = { lat: 39.4283, lng: -0.4175 };
             
             map = new google.maps.Map(document.getElementById('map'), {
@@ -686,19 +569,11 @@
                 center: paiportaCoords,
                 mapTypeControl: false,
                 streetViewControl: false,
-                fullscreenControl: false,
-                styles: [
-                    {
-                        featureType: "poi",
-                        elementType: "labels",
-                        stylers: [{ visibility: "off" }]
-                    }
-                ]
+                fullscreenControl: false
             });
 
             geocoder = new google.maps.Geocoder();
 
-            // Permitir clic en el mapa para colocar marcador
             map.addListener('click', function(event) {
                 placeMarker(event.latLng);
             });
@@ -717,27 +592,19 @@
                 title: 'Ubicación del negocio'
             });
 
-            // Centrar mapa en el marcador
             map.setCenter(latLng);
             map.setZoom(17);
 
-            // Guardar coordenadas
             selectedCoordinates = {
                 lat: latLng.lat(),
                 lng: latLng.lng()
             };
 
-            // Actualizar campos ocultos
             document.getElementById('businessLat').value = selectedCoordinates.lat;
             document.getElementById('businessLng').value = selectedCoordinates.lng;
 
-            // Mostrar coordenadas
             updateCoordinatesDisplay();
-            
-            // Mostrar botón de confirmar
             document.getElementById('confirmLocationBtn').style.display = 'inline-flex';
-            
-            // Actualizar estado
             updateMapStatus('success', '✅ Ubicación seleccionada. Puedes arrastrar el marcador si necesitas ajustarlo.');
         }
 
@@ -759,7 +626,6 @@
                     updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
                 } else {
                     updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
-                    // Centrar en Paiporta si no encuentra la dirección
                     map.setCenter({ lat: 39.4283, lng: -0.4175 });
                     map.setZoom(15);
                 }
@@ -805,7 +671,6 @@
             
             counter.textContent = `${currentLength} / ${maxLength} caracteres`;
             
-            // Cambiar color según el uso
             counter.className = 'char-counter';
             if (currentLength > maxLength * 0.8) {
                 counter.classList.add('warning');
@@ -818,13 +683,12 @@
         // Validación del teléfono
         function validatePhone() {
             const phoneInput = document.getElementById('businessPhone');
-            const phoneValue = phoneInput.value.replace(/\D/g, ''); // Solo números
+            const phoneValue = phoneInput.value.replace(/\D/g, '');
             
             if (phoneValue.length > 9) {
                 phoneInput.value = phoneValue.slice(0, 9);
             }
             
-            // Solo permitir números
             phoneInput.value = phoneValue;
         }
 
@@ -832,7 +696,6 @@
         function initDatePicker() {
             const dateInput = document.getElementById('businessReopenDate');
             
-            // Crear el datepicker
             const datepicker = new Datepicker(dateInput, {
                 format: 'dd/mm/yyyy',
                 language: 'es',
@@ -865,12 +728,10 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Guardar en localStorage
             const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
             pendingBusinesses.push(businessData);
             localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
 
-            // Mostrar mensaje de éxito
             const formContent = document.querySelector('.form-content');
             formContent.innerHTML = `
                 <div class="success-message">
@@ -889,17 +750,14 @@
                 form.addEventListener('submit', handleAddBusinessForm);
             }
 
-            // Inicializar mapa
             initMap();
 
-            // Configurar contador de caracteres
             const textarea = document.getElementById('businessDescription');
             if (textarea) {
                 textarea.addEventListener('input', updateCharCounter);
-                updateCharCounter(); // Inicializar contador
+                updateCharCounter();
             }
 
-            // Configurar validación del teléfono
             const phoneInput = document.getElementById('businessPhone');
             if (phoneInput) {
                 phoneInput.addEventListener('input', validatePhone);
@@ -910,23 +768,13 @@
                 });
             }
 
-            // Inicializar datepicker
             initDatePicker();
 
-            // Configurar botones del mapa
             document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
             document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
             document.getElementById('confirmLocationBtn').addEventListener('click', function() {
                 updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
             });
-
-            // Page Transition
-            const pageContent = document.querySelector('.page-transition');
-            if (pageContent) {
-                setTimeout(() => {
-                    pageContent.classList.add('loaded');
-                }, 100);
-            }
         });
     </script>
 </body>
