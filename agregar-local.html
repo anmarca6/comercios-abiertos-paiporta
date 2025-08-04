@@ -109,7 +109,7 @@
 
         .form-label {
             display: block;
-            margin-bottom: var(--space-sm);
+            margin-bottom: 0.5rem;
             font-weight: 600;
             color: var(--text-primary);
             font-size: 0.95rem;
@@ -147,9 +147,17 @@
             margin-top: 0.25rem;
         }
 
+        .char-counter.warning {
+            color: #f59e0b;
+        }
+
+        .char-counter.error {
+            color: #ef4444;
+        }
+
         .phone-input-container {
             display: flex;
-            gap: var(--space-sm);
+            gap: 0.5rem;
             align-items: center;
         }
 
@@ -184,14 +192,14 @@
 
         .map-instructions {
             background: var(--background);
-            padding: var(--space-md);
+            padding: 1rem;
             border-radius: 8px;
-            margin-bottom: var(--space-md);
+            margin-bottom: 1rem;
             border: 1px solid var(--border);
         }
 
         .map-instructions h4 {
-            margin-bottom: var(--space-sm);
+            margin-bottom: 0.5rem;
             color: var(--text-primary);
             font-size: 1rem;
         }
@@ -199,15 +207,15 @@
         .map-instructions p {
             font-size: 0.9rem;
             color: var(--text-secondary);
-            margin-bottom: var(--space-sm);
+            margin-bottom: 0.5rem;
         }
 
         .map-status {
             display: flex;
             align-items: center;
-            gap: var(--space-sm);
+            gap: 0.5rem;
             font-size: 0.9rem;
-            margin-top: var(--space-sm);
+            margin-top: 0.5rem;
         }
 
         .map-status.success { color: var(--success); }
@@ -216,8 +224,8 @@
 
         .map-controls {
             display: flex;
-            gap: var(--space-sm);
-            margin-top: var(--space-md);
+            gap: 0.5rem;
+            margin-top: 1rem;
             flex-wrap: wrap;
         }
 
@@ -246,9 +254,9 @@
 
         .coordinates-display {
             background: var(--background);
-            padding: var(--space-md);
+            padding: 1rem;
             border-radius: 8px;
-            margin-top: var(--space-md);
+            margin-top: 1rem;
             border: 1px solid var(--border);
             font-family: monospace;
             font-size: 0.9rem;
@@ -256,7 +264,7 @@
 
         .coordinates-values {
             background: white;
-            padding: var(--space-sm);
+            padding: 0.5rem;
             border-radius: 4px;
             border: 1px solid var(--border);
             font-family: monospace;
@@ -265,7 +273,7 @@
 
         .form-actions {
             display: flex;
-            gap: var(--space-md);
+            gap: 1rem;
             justify-content: center;
             margin-top: var(--space-xl);
             flex-wrap: wrap;
@@ -320,7 +328,7 @@
 
         .success-title {
             font-size: 1.5rem;
-            margin-bottom: var(--space-md);
+            margin-bottom: 1rem;
             color: var(--success);
         }
 
@@ -696,7 +704,7 @@
         function initDatePicker() {
             const dateInput = document.getElementById('businessReopenDate');
             
-            if (typeof Datepicker !== 'undefined') {
+            try {
                 const datepicker = new Datepicker(dateInput, {
                     format: 'dd/mm/yyyy',
                     language: 'es',
@@ -708,8 +716,9 @@
                     todayBtnMode: 1,
                     clearBtnMode: 1
                 });
-            } else {
-                console.error('Datepicker no está disponible');
+                console.log('Datepicker inicializado correctamente');
+            } catch (error) {
+                console.error('Error al inicializar datepicker:', error);
             }
         }
 
@@ -754,7 +763,13 @@
                 form.addEventListener('submit', handleAddBusinessForm);
             }
 
-            initMap();
+            // Inicializar mapa después de que Google Maps esté cargado
+            if (typeof google !== 'undefined' && google.maps) {
+                initMap();
+            } else {
+                // Esperar a que Google Maps se cargue
+                window.initMap = initMap;
+            }
 
             const textarea = document.getElementById('businessDescription');
             if (textarea) {
@@ -772,7 +787,8 @@
                 });
             }
 
-            initDatePicker();
+            // Inicializar datepicker después de que las librerías estén cargadas
+            setTimeout(initDatePicker, 100);
 
             document.getElementById('searchLocationBtn').addEventListener('click', searchAddress);
             document.getElementById('clearMarkerBtn').addEventListener('click', clearMarker);
