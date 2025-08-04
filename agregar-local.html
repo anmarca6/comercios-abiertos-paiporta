@@ -622,29 +622,28 @@
                                         </button>
                                     </div>
                                     
-                                    <!-- Sección del mapa -->
-                                    <div class="map-section">
-                                        <div class="map-instructions">
-                                            <h4>📍 Ubicación del negocio</h4>
-                                            <p>Escribe la dirección y el mapa intentará localizarla automáticamente. Si no encuentra la ubicación exacta, puedes hacer clic en el mapa para colocar el marcador manualmente</p>
-                                            <div class="map-status" id="mapStatus">
-                                                <span>⏳ Esperando dirección...</span>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="map-container" id="mapContainer">
-                                            <div id="map" style="width: 100%; height: 100%;"></div>
-                                        </div>
-                                        
-                                        <div class="map-controls">
-                                            <button type="button" class="map-btn" id="clearMarkerBtn">
-                                                🗑️ Limpiar marcador
-                                            </button>
-                                            <button type="button" class="map-btn primary" id="confirmLocationBtn" disabled>
-                                                ✅ Confirmar ubicación
-                                            </button>
-                                        </div>
-                                    </div>
+                                                                         <!-- Sección del mapa -->
+                                     <div class="map-section">
+                                         <div class="map-instructions">
+                                             <h4>📍 Ubicación del negocio</h4>
+                                             <div class="map-status" id="mapStatus">
+                                                 <span>⏳ Esperando dirección...</span>
+                                             </div>
+                                             
+                                             <div class="map-container" id="mapContainer">
+                                                 <div id="map" style="width: 100%; height: 100%;"></div>
+                                             </div>
+                                             
+                                             <div class="map-controls">
+                                                 <button type="button" class="map-btn" id="clearMarkerBtn">
+                                                     🗑️ Limpiar marcador
+                                                 </button>
+                                                 <button type="button" class="map-btn primary" id="confirmLocationBtn" disabled>
+                                                     ✅ Confirmar ubicación
+                                                 </button>
+                                             </div>
+                                         </div>
+                                     </div>
                                 </div>
                                 
                                 <!-- Campos ocultos para coordenadas -->
@@ -809,16 +808,16 @@
                     console.log('Ubicación encontrada:', location);
                     const latlng = [parseFloat(location.lat), parseFloat(location.lon)];
                     placeMarker(latlng);
-                    updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
+                    updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente');
                 } else {
                     console.log('No se encontraron resultados para:', address);
-                    updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+                    updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente');
                     map.setView([39.4283, -0.4175], 15);
                 }
             })
             .catch(error => {
                 console.error('Error al buscar dirección:', error);
-                updateMapStatus('error', `❌ Error al buscar la dirección: ${error.message}. Haz clic en el mapa para colocar el marcador manualmente.`);
+                updateMapStatus('error', `❌ Error al buscar la dirección: ${error.message}. Haz clic en el mapa para colocar el marcador manualmente`);
             });
         }
 
@@ -848,7 +847,7 @@
             document.getElementById('businessLat').value = '';
             document.getElementById('businessLng').value = '';
             document.getElementById('confirmLocationBtn').disabled = true;
-            updateMapStatus('warning', '🗑️ Marcador eliminado. Escribe una dirección o haz clic en el mapa.');
+            updateMapStatus('warning', '🗑️ Escribe una dirección o haz clic en el mapa');
         }
 
         // Contador de caracteres
