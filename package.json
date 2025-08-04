@@ -1,0 +1,26 @@
+{
+  "name": "personal_paiporta_dana",
+  "version": "1.0.0",
+  "description": "Aplicación web para mostrar los comercios que van reabriendo en Paiporta tras la DANA del 29 de octubre de 2024.",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --mode production",
+    "dev": "webpack --mode development --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "paiporta",
+    "comercios",
+    "dana",
+    "valencia"
+  ],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@vercel/analytics": "^1.1.1"
+  },
+  "devDependencies": {
+    "webpack": "^5.101.0",
+    "webpack-cli": "^5.1.4"
+  }
+}

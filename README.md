@@ -60,6 +60,29 @@
 - **Sin frameworks** - máximo rendimiento
 - **Sin dependencias externas** - total autonomía
 - **Google Fonts** para tipografía (CDN)
+- **Vercel Analytics** para monitorización de visitas
+
+## 📊 Analytics y Monitorización
+
+### **Vercel Analytics:**
+- ✅ **Monitorización automática** de visitas y páginas vistas
+- ✅ **Eventos personalizados** para tracking de interacciones
+- ✅ **Métricas en tiempo real** sin configuración adicional
+- ✅ **Respeto por la privacidad** - sin cookies intrusivas
+
+### **Eventos trackeados:**
+- Navegación entre páginas
+- Búsquedas realizadas
+- Clics en comercios
+- Interacciones con el formulario
+- Filtros aplicados
+
+### **Configuración:**
+El analytics se activa automáticamente cuando el proyecto se despliega en Vercel. Para ver las métricas:
+1. Ve a tu dashboard de Vercel
+2. Selecciona tu proyecto
+3. Ve a la pestaña "Analytics"
+4. Visualiza visitas, páginas más populares y eventos
 
 ## 🔧 Personalización
 
