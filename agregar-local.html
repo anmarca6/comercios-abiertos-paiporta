@@ -696,17 +696,21 @@
         function initDatePicker() {
             const dateInput = document.getElementById('businessReopenDate');
             
-            const datepicker = new Datepicker(dateInput, {
-                format: 'dd/mm/yyyy',
-                language: 'es',
-                autohide: true,
-                maxDate: new Date('2024-10-29'),
-                minDate: new Date(),
-                todayBtn: true,
-                clearBtn: true,
-                todayBtnMode: 1,
-                clearBtnMode: 1
-            });
+            if (typeof Datepicker !== 'undefined') {
+                const datepicker = new Datepicker(dateInput, {
+                    format: 'dd/mm/yyyy',
+                    language: 'es',
+                    autohide: true,
+                    maxDate: new Date('2024-10-29'),
+                    minDate: new Date(),
+                    todayBtn: true,
+                    clearBtn: true,
+                    todayBtnMode: 1,
+                    clearBtnMode: 1
+                });
+            } else {
+                console.error('Datepicker no está disponible');
+            }
         }
 
         // Manejar envío del formulario
