@@ -545,7 +545,7 @@
                                 <div class="form-group">
                                     <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
-                                           class="form-input" required min="2024-01-01" max="2024-10-29"
+                                           class="form-input" required
                                            style="position: relative; z-index: 10; cursor: pointer;">
                                     <div class="date-help" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                         Selecciona una fecha entre hoy y el 29 de octubre de 2024
@@ -733,25 +733,49 @@
 
             updateMapStatus('warning', '🔍 Buscando dirección...');
 
-            const searchUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address + ', Paiporta, Valencia, Spain')}&limit=1`;
+            // Construir la URL de búsqueda con parámetros más específicos
+            const searchParams = new URLSearchParams({
+                format: 'json',
+                q: address + ', Paiporta, Valencia, Spain',
+                limit: '1',
+                addressdetails: '1',
+                countrycodes: 'es'
+            });
 
-            fetch(searchUrl)
-                .then(response => response.json())
-                .then(data => {
-                    if (data && data.length > 0) {
-                        const location = data[0];
-                        const latlng = [parseFloat(location.lat), parseFloat(location.lon)];
-                        placeMarker(latlng);
-                        updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
-                    } else {
-                        updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
-                        map.setView([39.4283, -0.4175], 15);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error al buscar dirección:', error);
-                    updateMapStatus('error', '❌ Error al buscar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
-                });
+            const searchUrl = `https://nominatim.openstreetmap.org/search?${searchParams.toString()}`;
+
+            console.log('Buscando dirección:', searchUrl);
+
+            fetch(searchUrl, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'User-Agent': 'ComerciosPaiporta/1.0'
+                }
+            })
+            .then(response => {
+                console.log('Respuesta del servidor:', response.status, response.statusText);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Datos recibidos:', data);
+                if (data && data.length > 0) {
+                    const location = data[0];
+                    const latlng = [parseFloat(location.lat), parseFloat(location.lon)];
+                    placeMarker(latlng);
+                    updateMapStatus('success', '✅ Dirección encontrada y marcada automáticamente.');
+                } else {
+                    updateMapStatus('error', '❌ No se pudo encontrar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+                    map.setView([39.4283, -0.4175], 15);
+                }
+            })
+            .catch(error => {
+                console.error('Error al buscar dirección:', error);
+                updateMapStatus('error', '❌ Error al buscar la dirección. Haz clic en el mapa para colocar el marcador manualmente.');
+            });
         }
 
         // Actualizar estado del mapa
@@ -1082,9 +1106,12 @@
             // Configurar fecha mínima para el campo de fecha
             const dateInput = document.getElementById('businessReopenDate');
             if (dateInput) {
-                const today = new Date().toISOString().split('T')[0];
-                dateInput.min = today;
-                dateInput.max = '2024-10-29';
+                const today = new Date();
+                const todayString = today.toISOString().split('T')[0];
+                const maxDate = '2024-10-29';
+                
+                dateInput.min = todayString;
+                dateInput.max = maxDate;
                 
                 // Mejorar la experiencia del datepicker
                 dateInput.addEventListener('focus', function() {
