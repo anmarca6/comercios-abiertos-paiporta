@@ -700,9 +700,10 @@
 
             map.setView(latlng, 17);
 
+            // Asegurar que las coordenadas sean números
             selectedCoordinates = {
-                lat: latlng.lat,
-                lng: latlng.lng
+                lat: parseFloat(latlng.lat),
+                lng: parseFloat(latlng.lng)
             };
 
             document.getElementById('businessLat').value = selectedCoordinates.lat;
@@ -716,8 +717,8 @@
             marker.on('dragend', function(e) {
                 const newLatLng = e.target.getLatLng();
                 selectedCoordinates = {
-                    lat: newLatLng.lat,
-                    lng: newLatLng.lng
+                    lat: parseFloat(newLatLng.lat),
+                    lng: parseFloat(newLatLng.lng)
                 };
                 document.getElementById('businessLat').value = selectedCoordinates.lat;
                 document.getElementById('businessLng').value = selectedCoordinates.lng;
@@ -793,7 +794,7 @@
         // Actualizar display de coordenadas
         function updateCoordinatesDisplay() {
             // Las coordenadas se guardan internamente pero no se muestran al usuario
-            if (selectedCoordinates) {
+            if (selectedCoordinates && selectedCoordinates.lat && selectedCoordinates.lng) {
                 // Coordenadas guardadas internamente
                 console.log(`Coordenadas guardadas: ${selectedCoordinates.lat.toFixed(6)}, ${selectedCoordinates.lng.toFixed(6)}`);
             }
