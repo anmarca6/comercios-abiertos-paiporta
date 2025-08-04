@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agregar mi local - Comercios Paiporta</title>
+    <meta name="description" content="Añade tu negocio al directorio de comercios de Paiporta. Ayuda en la recuperación comercial post-DANA.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Variables CSS */
+        :root {
+            --primary: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%);
+            --primary-solid: #1e40af;
+            --background: #fefefe;
+            --surface: #ffffff;
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --border: #e5e7eb;
+            --success: #10b981;
+            --space-lg: 1rem;
+            --space-xl: 1.5rem;
+            --space-2xl: 2rem;
+            --font-primary: 'Inter', sans-serif;
+            --font-display: 'Poppins', sans-serif;
+        }
+
+        /* Reset y base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: var(--font-primary);
+            background: var(--background);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Tipografía */
+        h1, h2, h3, h4, h5, h6 {
+            font-family: var(--font-display);
+            font-weight: 700;
+            line-height: 1.2;
+        }
+
+        h1 { font-size: 2.5rem; }
+        h2 { font-size: 2rem; }
+        h3 { font-size: 1.5rem; }
+        h4 { font-size: 1.25rem; }
+
+        /* Contenedores */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 var(--space-lg);
+        }
+
+        /* Header */
+        .header {
+            background: var(--primary);
+            color: white;
+            padding: var(--space-2xl) 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(180deg); }
+        }
+
+        .header h1 {
+            font-family: var(--font-display);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 700;
+            margin-bottom: var(--space-lg);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Back button */
+        .back-button {
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-sm);
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            margin-bottom: var(--space-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        .back-button:hover {
+            opacity: 0.8;
+            transform: translateX(-2px);
+        }
+
+        /* Contenido principal */
+        .main-content {
+            padding: var(--space-2xl) 0;
+        }
+
+        /* Formulario */
+        .form-container {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .form-header {
+            background: var(--primary);
+            color: white;
+            padding: var(--space-xl);
+            text-align: center;
+        }
+
+        .form-header h2 {
+            margin-bottom: var(--space-sm);
+            font-size: 1.8rem;
+        }
+
+        .form-header p {
+            opacity: 0.9;
+            font-size: 1rem;
+        }
+
+        .form-content {
+            padding: var(--space-xl);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .form-group {
+            margin-bottom: var(--space-lg);
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-sm);
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary-solid);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: var(--space-md);
+            justify-content: center;
+            margin-top: var(--space-xl);
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-secondary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--background);
+            border-color: var(--primary-solid);
+            color: var(--primary-solid);
+        }
+
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* Success message */
+        .success-message {
+            text-align: center;
+            padding: var(--space-2xl);
+            color: var(--success);
+        }
+
+        .success-icon {
+            font-size: 4rem;
+            margin-bottom: var(--space-lg);
+        }
+
+        .success-title {
+            font-size: 1.5rem;
+            margin-bottom: var(--space-md);
+            color: var(--success);
+        }
+
+        .success-description {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-lg);
+        }
+
+        /* Footer */
+        .footer {
+            background: var(--text-primary);
+            color: white;
+            text-align: center;
+            padding: var(--space-xl) 0;
+            margin-top: var(--space-xl);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 var(--space-md);
+            }
+            
+            .header {
+                padding: var(--space-xl) 0;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Page Transition */
+        .page-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+
+        .page-transition.loaded {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <a href="index.html" class="back-button">
+                ← Volver al directorio
+            </a>
+            <h1>🏪 Agregar mi local</h1>
+            <p class="header-subtitle">Completa todos los campos para añadir tu negocio al directorio</p>
+        </div>
+    </div>
+
+    <main class="main-content page-transition">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>📝 Información del negocio</h2>
+                    <p>Ayuda a la recuperación comercial de Paiporta</p>
+                </div>
+                
+                <div class="form-content">
+                    <form id="addBusinessForm">
+                        <div class="form-grid">
+                            <!-- Información básica -->
+                            <div>
+                                <div class="form-group">
+                                    <label for="businessName" class="form-label">Nombre del negocio *</label>
+                                    <input type="text" id="businessName" name="nombre" class="form-input" required 
+                                           placeholder="Ej: Panadería El Horno">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessType" class="form-label">Tipo de negocio *</label>
+                                    <select id="businessType" name="tipo" class="form-select" required>
+                                        <option value="">Selecciona una categoría</option>
+                                        <option value="alimentacion">Alimentación</option>
+                                        <option value="bares">Bares</option>
+                                        <option value="restauracion">Restauración</option>
+                                        <option value="servicios">Servicios</option>
+                                        <option value="animales">Animales</option>
+                                        <option value="agrupaciones">Agrupaciones comerciales</option>
+                                        <option value="hosteleria">Hostelería y turismo</option>
+                                        <option value="ocio">Ocio, deporte y aficiones</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessDescription" class="form-label">Descripción *</label>
+                                    <textarea id="businessDescription" name="descripcion" class="form-textarea" required 
+                                              rows="3" maxlength="200" 
+                                              placeholder="Describe tu negocio, productos o servicios que ofreces..."></textarea>
+                                </div>
+                            </div>
+
+                            <!-- Contacto -->
+                            <div>
+                                <div class="form-group">
+                                    <label for="businessAddress" class="form-label">Dirección *</label>
+                                    <input type="text" id="businessAddress" name="direccion" class="form-input" 
+                                           required placeholder="Ej: Calle Mayor, 1, Paiporta">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessPhone" class="form-label">Teléfono *</label>
+                                    <input type="tel" id="businessPhone" name="telefono" class="form-input" 
+                                           required placeholder="+34 123 456 789">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessHours" class="form-label">Horario</label>
+                                    <input type="text" id="businessHours" name="horario" class="form-input" 
+                                           placeholder="Ej: L-V 9:00-18:00, S 9:00-14:00">
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
+                                    <input type="date" id="businessReopenDate" name="fechaReapertura" 
+                                           class="form-input" required min="2024-10-29">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">
+                                <span>📤</span>
+                                <span>Enviar información</span>
+                            </button>
+                            <a href="index.html" class="btn btn-secondary">Cancelar</a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <div class="footer">
+        <div class="container">
+            <p>Apoya el comercio local · Solo el pueblo salva al pueblo</p>
+        </div>
+    </div>
+
+    <script>
+        // Manejar envío del formulario
+        const handleAddBusinessForm = (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const businessData = {
+                id: Date.now(),
+                nombre: formData.get('nombre'),
+                tipo: formData.get('tipo'),
+                direccion: formData.get('direccion'),
+                telefono: formData.get('telefono'),
+                horario: formData.get('horario'),
+                descripcion: formData.get('descripcion'),
+                fechaReapertura: formData.get('fechaReapertura'),
+                timestamp: new Date().toISOString()
+            };
+
+            // Guardar en localStorage
+            const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
+            pendingBusinesses.push(businessData);
+            localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
+
+            // Mostrar mensaje de éxito
+            const formContent = document.querySelector('.form-content');
+            formContent.innerHTML = `
+                <div class="success-message">
+                    <div class="success-icon">✅</div>
+                    <h3 class="success-title">¡Local agregado correctamente!</h3>
+                    <p class="success-description">Tu negocio ha sido añadido al directorio. Aparecerá en la lista una vez sea revisado.</p>
+                    <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+                </div>
+            `;
+        };
+
+        // Configurar formulario
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('addBusinessForm');
+            if (form) {
+                form.addEventListener('submit', handleAddBusinessForm);
+            }
+
+            // Page Transition
+            const pageContent = document.querySelector('.page-transition');
+            if (pageContent) {
+                setTimeout(() => {
+                    pageContent.classList.add('loaded');
+                }, 100);
+            }
+        });
+    </script>
+</body>
+</html> 
