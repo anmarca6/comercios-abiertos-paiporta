@@ -315,25 +315,91 @@
         }
 
         /* Hover effects for category filters */
+        .filter-chip.agrupaciones:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
+            background: rgba(6, 182, 212, 0.1);
+        }
+
         .filter-chip.alimentacion:hover {
             border-color: #10b981;
             color: #10b981;
             background: rgba(16, 185, 129, 0.1);
         }
 
-        .filter-chip.animales:hover {
-            border-color: #8b5cf6;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .filter-chip.bares:hover {
+        .filter-chip.carburantes:hover {
             border-color: #f59e0b;
             color: #f59e0b;
             background: rgba(245, 158, 11, 0.1);
         }
 
-        .filter-chip.restauracion:hover {
+        .filter-chip.drogueria:hover {
+            border-color: #8b5cf6;
+            color: #8b5cf6;
+            background: rgba(139, 92, 246, 0.1);
+        }
+
+        .filter-chip.finanzas:hover {
+            border-color: #3b82f6;
+            color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .filter-chip.flores:hover {
+            border-color: #84cc16;
+            color: #84cc16;
+            background: rgba(132, 204, 22, 0.1);
+        }
+
+        .filter-chip.hosteleria:hover {
+            border-color: #ec4899;
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        .filter-chip.informatica:hover {
+            border-color: #6366f1;
+            color: #6366f1;
+            background: rgba(99, 102, 241, 0.1);
+        }
+
+        .filter-chip.joyeria:hover {
+            border-color: #fbbf24;
+            color: #fbbf24;
+            background: rgba(251, 191, 36, 0.1);
+        }
+
+        .filter-chip.hogar:hover {
+            border-color: #f97316;
+            color: #f97316;
+            background: rgba(249, 115, 22, 0.1);
+        }
+
+        .filter-chip.mayoristas:hover {
+            border-color: #64748b;
+            color: #64748b;
+            background: rgba(100, 116, 139, 0.1);
+        }
+
+        .filter-chip.moda:hover {
+            border-color: #ec4899;
+            color: #ec4899;
+            background: rgba(236, 72, 153, 0.1);
+        }
+
+        .filter-chip.ocio:hover {
+            border-color: #84cc16;
+            color: #84cc16;
+            background: rgba(132, 204, 22, 0.1);
+        }
+
+        .filter-chip.papeleria:hover {
+            border-color: #06b6d4;
+            color: #06b6d4;
+            background: rgba(6, 182, 212, 0.1);
+        }
+
+        .filter-chip.salud:hover {
             border-color: #ef4444;
             color: #ef4444;
             background: rgba(239, 68, 68, 0.1);
@@ -345,22 +411,16 @@
             background: rgba(59, 130, 246, 0.1);
         }
 
-        .filter-chip.agrupaciones:hover {
-            border-color: #06b6d4;
-            color: #06b6d4;
-            background: rgba(6, 182, 212, 0.1);
+        .filter-chip.tabaco:hover {
+            border-color: #7c3aed;
+            color: #7c3aed;
+            background: rgba(124, 58, 237, 0.1);
         }
 
-        .filter-chip.hosteleria:hover {
-            border-color: #ec4899;
-            color: #ec4899;
-            background: rgba(236, 72, 153, 0.1);
-        }
-
-        .filter-chip.ocio:hover {
-            border-color: #84cc16;
-            color: #84cc16;
-            background: rgba(132, 204, 22, 0.1);
+        .filter-chip.automocion:hover {
+            border-color: #dc2626;
+            color: #dc2626;
+            background: rgba(220, 38, 38, 0.1);
         }
 
         .filter-chip.active {
@@ -870,14 +930,24 @@
         const formatFilterLabel = (filter) => {
             const labels = {
                 'todos': 'Todos',
-                'alimentacion': 'Alimentación',
-                'animales': 'Animales',
-                'bares': 'Bares',
-                'restauracion': 'Restauración',
-                'servicios': 'Servicios',
                 'agrupaciones': 'Agrupaciones comerciales',
+                'alimentacion': 'Alimentación',
+                'carburantes': 'Carburantes',
+                'drogueria': 'Droguería y perfumería',
+                'finanzas': 'Finanzas y gestión',
+                'flores': 'Flores, jardinería y animales',
                 'hosteleria': 'Hostelería y turismo',
-                'ocio': 'Ocio, deporte y aficiones'
+                'informatica': 'Informática, imagen y sonido',
+                'joyeria': 'Joyería y relojería',
+                'hogar': 'Hogar y decoración',
+                'mayoristas': 'Mayoristas',
+                'moda': 'Moda y complementos',
+                'ocio': 'Ocio, deportes y aficiones',
+                'papeleria': 'Papelería, librería y quioscos',
+                'salud': 'Salud y belleza',
+                'servicios': 'Servicios',
+                'tabaco': 'Tabaco y loterías',
+                'automocion': 'Automoción'
             };
             return labels[filter] || filter;
         };
@@ -885,14 +955,24 @@
         // Formatear tipos en las tarjetas
         const formatTipo = (tipo) => {
             const tipos = {
-                'alimentacion': 'Alimentación',
-                'animales': 'Animales',
-                'bares': 'Bares',
-                'restauracion': 'Restauración',
-                'servicios': 'Servicios',
                 'agrupaciones': 'Agrupaciones comerciales',
+                'alimentacion': 'Alimentación',
+                'carburantes': 'Carburantes',
+                'drogueria': 'Droguería y perfumería',
+                'finanzas': 'Finanzas y gestión',
+                'flores': 'Flores, jardinería y animales',
                 'hosteleria': 'Hostelería y turismo',
-                'ocio': 'Ocio, deporte y aficiones'
+                'informatica': 'Informática, imagen y sonido',
+                'joyeria': 'Joyería y relojería',
+                'hogar': 'Hogar y decoración',
+                'mayoristas': 'Mayoristas',
+                'moda': 'Moda y complementos',
+                'ocio': 'Ocio, deportes y aficiones',
+                'papeleria': 'Papelería, librería y quioscos',
+                'salud': 'Salud y belleza',
+                'servicios': 'Servicios',
+                'tabaco': 'Tabaco y loterías',
+                'automocion': 'Automoción'
             };
             return tipos[tipo] || tipo.charAt(0).toUpperCase() + tipo.slice(1);
         };
@@ -911,14 +991,24 @@
         // Obtener color de categoría
         const getCategoryColor = (tipo) => {
             const colors = {
-                'alimentacion': '#10b981', // Verde esmeralda
-                'animales': '#8b5cf6', // Violeta
-                'bares': '#f59e0b', // Ámbar
-                'restauracion': '#ef4444', // Rojo
-                'servicios': '#3b82f6', // Azul
                 'agrupaciones': '#06b6d4', // Cian
+                'alimentacion': '#10b981', // Verde esmeralda
+                'carburantes': '#f59e0b', // Ámbar
+                'drogueria': '#8b5cf6', // Violeta
+                'finanzas': '#3b82f6', // Azul
+                'flores': '#84cc16', // Verde lima
                 'hosteleria': '#ec4899', // Rosa
-                'ocio': '#84cc16' // Verde lima
+                'informatica': '#6366f1', // Índigo
+                'joyeria': '#fbbf24', // Amarillo
+                'hogar': '#f97316', // Naranja
+                'mayoristas': '#64748b', // Slate
+                'moda': '#ec4899', // Rosa
+                'ocio': '#84cc16', // Verde lima
+                'papeleria': '#06b6d4', // Cian
+                'salud': '#ef4444', // Rojo
+                'servicios': '#3b82f6', // Azul
+                'tabaco': '#7c3aed', // Violeta
+                'automocion': '#dc2626' // Rojo oscuro
             };
             return colors[tipo] || '#6b7280'; // Gris por defecto
         };
