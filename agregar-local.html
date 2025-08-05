@@ -277,6 +277,13 @@
             position: relative;
             flex: 1;
             min-height: 600px;
+            background: #f8f9fa;
+        }
+        
+        #map {
+            width: 100% !important;
+            height: 100% !important;
+            min-height: 600px !important;
         }
 
         .map-instructions {
@@ -639,7 +646,7 @@
                                              </div>
                                              
                                              <div class="map-container" id="mapContainer">
-                                                 <div id="map" style="width: 100%; height: 100%;"></div>
+                                                 <div id="map"></div>
                                              </div>
                                              
                                              <div class="map-controls">
@@ -693,9 +700,9 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     
 
     
@@ -707,38 +714,36 @@
 
         // Inicializar mapa con Leaflet
         function initMap() {
+            console.log('Inicializando mapa...');
+            
+            // Verificar que el elemento del mapa existe
+            const mapElement = document.getElementById('map');
+            if (!mapElement) {
+                console.error('Elemento del mapa no encontrado');
+                return;
+            }
+            
+            // Verificar que Leaflet está disponible
+            if (typeof L === 'undefined') {
+                console.error('Leaflet no está disponible');
+                updateMapStatus('error', '❌ Error: Leaflet no está cargado');
+                return;
+            }
+            
             try {
-                console.log('Inicializando mapa...');
                 const paiportaCoords = [39.4283, -0.4175];
                 
-                // Verificar que el elemento del mapa existe
-                const mapElement = document.getElementById('map');
-                if (!mapElement) {
-                    console.error('Elemento del mapa no encontrado');
-                    return;
-                }
-                
-                // Verificar que Leaflet está disponible
-                if (typeof L === 'undefined') {
-                    console.error('Leaflet no está disponible');
-                    updateMapStatus('error', '❌ Error: Leaflet no está cargado');
-                    return;
-                }
-                
-                // Verificar que el contenedor del mapa tiene dimensiones
-                const container = document.getElementById('mapContainer');
-                if (container && container.offsetHeight === 0) {
-                    console.log('Contenedor del mapa sin altura, esperando...');
-                    setTimeout(initMap, 500);
-                    return;
-                }
-                
                 console.log('Creando mapa Leaflet...');
-                map = L.map('map').setView(paiportaCoords, 15);
+                map = L.map('map', {
+                    center: paiportaCoords,
+                    zoom: 15,
+                    zoomControl: true
+                });
                 
                 // Añadir capa de OpenStreetMap
                 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    attribution: '© OpenStreetMap contributors'
+                    attribution: '© OpenStreetMap contributors',
+                    maxZoom: 19
                 }).addTo(map);
 
                 // Evento de clic en el mapa
@@ -746,12 +751,13 @@
                     placeMarker(e.latlng);
                 });
                 
-                // Forzar actualización del mapa
+                // Forzar actualización del mapa después de un breve delay
                 setTimeout(() => {
                     if (map) {
                         map.invalidateSize();
+                        console.log('Mapa actualizado correctamente');
                     }
-                }, 100);
+                }, 200);
                 
                 console.log('Mapa inicializado correctamente');
                 updateMapStatus('success', '✅ Mapa cargado correctamente');
@@ -759,18 +765,23 @@
             } catch (error) {
                 console.error('Error al inicializar el mapa:', error);
                 updateMapStatus('error', '❌ Error al cargar el mapa. Verifica tu conexión a internet.');
-                const mapElement = document.getElementById('map');
-                if (mapElement) {
-                    mapElement.innerHTML = `
-                        <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
-                            <div style="text-align: center;">
-                                <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                                <p>No se pudo cargar el mapa</p>
-                                <p style="font-size: 0.8rem;">Verifica tu conexión a internet</p>
-                            </div>
+                showMapError();
+            }
+        }
+        
+        // Función para mostrar error del mapa
+        function showMapError() {
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                mapElement.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
+                        <div style="text-align: center;">
+                            <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
+                            <p>No se pudo cargar el mapa</p>
+                            <p style="font-size: 0.8rem;">Verifica tu conexión a internet</p>
                         </div>
-                    `;
-                }
+                    </div>
+                `;
             }
         }
 
@@ -1262,7 +1273,7 @@
             }
 
             // Inicializar mapa con retraso para asegurar que Leaflet esté cargado
-            setTimeout(() => {
+            function initializeMapWithRetry() {
                 console.log('Verificando Leaflet...');
                 if (typeof L !== 'undefined') {
                     console.log('Leaflet disponible, inicializando mapa...');
@@ -1287,23 +1298,13 @@
                         });
                     }
                 } else {
-                    console.error('Leaflet no está disponible');
-                    // Fallback si Leaflet no está disponible
-                    const mapElement = document.getElementById('map');
-                    if (mapElement) {
-                        mapElement.innerHTML = `
-                            <div style="display: flex; align-items: center; justify-content: center; height: 100%; background: #f5f5f5; color: #666;">
-                                <div style="text-align: center;">
-                                    <div style="font-size: 3rem; margin-bottom: 1rem;">🗺️</div>
-                                    <p>Mapa no disponible</p>
-                                    <p style="font-size: 0.8rem;">Puedes continuar sin el mapa</p>
-                                </div>
-                            </div>
-                        `;
-                    }
-                    updateMapStatus('warning', '⚠️ Mapa no disponible. Puedes continuar sin él.');
+                    console.error('Leaflet no está disponible, reintentando en 500ms...');
+                    setTimeout(initializeMapWithRetry, 500);
                 }
-            }, 2000); // Aumentar el tiempo de espera a 2 segundos
+            }
+            
+            // Iniciar la inicialización del mapa después de un breve delay
+            setTimeout(initializeMapWithRetry, 1000);
         });
     </script>
 </body>
