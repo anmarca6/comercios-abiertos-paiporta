@@ -6,7 +6,7 @@
 
 ### Archivos del proyecto (listos para producción):
 - `index.html` - Aplicación principal
-- `data/comercios.json` - Datos de los comercios
+- `data/comercios.json` - Datos de los comercios (fuente única)
 - `assets/img/` - Imágenes de los comercios
 - `README.md` - Esta documentación
 
@@ -87,7 +87,7 @@ El analytics se activa automáticamente cuando el proyecto se despliega en Verce
 ## 🔧 Personalización
 
 ### **Añadir comercios:**
-Edita el archivo `data/comercios.json` siguiendo este formato:
+Edita el archivo `data/comercios.json` (fuente única de datos) siguiendo este formato:
 
 ```json
 {
