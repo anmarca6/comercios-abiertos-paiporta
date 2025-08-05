@@ -598,7 +598,49 @@
 
         .btn-primary:hover {
             transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
+        }
+
+        /* Estilos para el botón de compartir */
+        .business-actions {
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+        }
+
+        .share-button {
+            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            border-radius: 12px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            box-shadow: 0 2px 8px rgba(37, 211, 102, 0.3);
+            width: 100%;
+            justify-content: center;
+        }
+
+        .share-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(37, 211, 102, 0.4);
+            background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+        }
+
+        .share-button:active {
+            transform: translateY(0);
+        }
+
+        .share-icon {
+            font-size: 1.1rem;
+        }
+
+        .share-text {
+            font-weight: 600;
         }
 
         .btn-secondary {
@@ -965,6 +1007,12 @@
                         ${comercio.horario ? `<div class="business-detail"><strong>🕒</strong> ${comercio.horario}</div>` : ''}
                     </div>
                     ${comercio.fechaReapertura ? `<div class="reopen-date">Reabierto: ${formatFecha(comercio.fechaReapertura)}</div>` : ''}
+                    <div class="business-actions">
+                        <button class="share-button" onclick="shareBusiness('${comercio.nombre}', '${comercio.tipo}', '${comercio.direccion}', '${comercio.telefono || ''}', '${comercio.descripcion || ''}')" aria-label="Compartir negocio vía WhatsApp">
+                            <span class="share-icon">📱</span>
+                            <span class="share-text">Compartir</span>
+                        </button>
+                    </div>
                 </div>
             `;
 
@@ -1152,6 +1200,37 @@
                 document.getElementById('emptyState').style.display = 'block';
                 document.getElementById('emptyState').innerHTML = `<h3>Error al cargar comercios</h3><p>${err.message}</p>`;
             }
+        }
+
+        // Función para compartir negocio vía WhatsApp
+        function shareBusiness(nombre, tipo, direccion, telefono, descripcion) {
+            // Formatear el tipo de negocio
+            const tipoFormateado = formatTipo(tipo);
+            
+            // Construir el mensaje
+            let mensaje = `🏪 *${nombre}*\n`;
+            mensaje += `📍 ${tipoFormateado}\n`;
+            mensaje += `📍 ${direccion}\n`;
+            
+            if (telefono) {
+                mensaje += `📞 ${telefono}\n`;
+            }
+            
+            if (descripcion) {
+                mensaje += `\n${descripcion}\n`;
+            }
+            
+            mensaje += `\n💚 Apoya el comercio local de Paiporta\n`;
+            mensaje += `🌐 Más comercios en: https://comercios-paiporta.vercel.app`;
+            
+            // Codificar el mensaje para URL
+            const mensajeCodificado = encodeURIComponent(mensaje);
+            
+            // Crear enlace de WhatsApp
+            const whatsappUrl = `https://wa.me/?text=${mensajeCodificado}`;
+            
+            // Abrir WhatsApp
+            window.open(whatsappUrl, '_blank');
         }
 
         // Inicializar cuando el DOM esté listo
