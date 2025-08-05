@@ -667,7 +667,7 @@
                         </div>
 
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">
+                            <button type="submit" class="btn btn-primary" id="submitBtn" disabled>
                                 <span>📤</span>
                                 <span>Enviar información</span>
                             </button>
@@ -1040,6 +1040,44 @@
             return errors;
         }
 
+        // Función para validar formulario en tiempo real
+        function validateFormRealTime() {
+            const submitBtn = document.getElementById('submitBtn');
+            
+            // Validar todos los campos obligatorios
+            const nombre = document.getElementById('businessName').value.trim();
+            const tipo = document.getElementById('businessType').value;
+            const descripcion = document.getElementById('businessDescription').value.trim();
+            const telefono = document.getElementById('businessPhone').value.trim();
+            const horario = document.getElementById('businessHours').value.trim();
+            const fechaReapertura = document.getElementById('businessReopenDate').value;
+            const direccion = document.getElementById('businessAddress').value.trim();
+            
+            // Verificar que todos los campos estén completos
+            const isFormValid = 
+                nombre.length >= 3 &&
+                tipo !== '' &&
+                descripcion.length >= 10 &&
+                telefono.length === 9 &&
+                horario.length > 0 &&
+                fechaReapertura !== '' &&
+                direccion.length > 0;
+            
+            // Habilitar/deshabilitar botón
+            if (submitBtn) {
+                submitBtn.disabled = !isFormValid;
+                
+                // Cambiar estilo visual del botón
+                if (isFormValid) {
+                    submitBtn.style.opacity = '1';
+                    submitBtn.style.cursor = 'pointer';
+                } else {
+                    submitBtn.style.opacity = '0.5';
+                    submitBtn.style.cursor = 'not-allowed';
+                }
+            }
+        }
+
         // Mostrar errores de validación
         function showValidationErrors(errors) {
             const errorHtml = `
@@ -1183,17 +1221,42 @@
             const textarea = document.getElementById('businessDescription');
             if (textarea) {
                 textarea.addEventListener('input', updateCharCounter);
+                textarea.addEventListener('input', validateFormRealTime);
                 updateCharCounter();
             }
 
             const phoneInput = document.getElementById('businessPhone');
             if (phoneInput) {
                 phoneInput.addEventListener('input', validatePhone);
+                phoneInput.addEventListener('input', validateFormRealTime);
                 phoneInput.addEventListener('keypress', function(e) {
                     if (!/[0-9]/.test(e.key)) {
                         e.preventDefault();
                     }
                 });
+            }
+
+            // Añadir event listeners para validación en tiempo real
+            const businessName = document.getElementById('businessName');
+            const businessType = document.getElementById('businessType');
+            const businessHours = document.getElementById('businessHours');
+            const businessReopenDate = document.getElementById('businessReopenDate');
+            const businessAddress = document.getElementById('businessAddress');
+
+            if (businessName) {
+                businessName.addEventListener('input', validateFormRealTime);
+            }
+            if (businessType) {
+                businessType.addEventListener('change', validateFormRealTime);
+            }
+            if (businessHours) {
+                businessHours.addEventListener('input', validateFormRealTime);
+            }
+            if (businessReopenDate) {
+                businessReopenDate.addEventListener('change', validateFormRealTime);
+            }
+            if (businessAddress) {
+                businessAddress.addEventListener('input', validateFormRealTime);
             }
 
             // Configurar datepicker nativo
