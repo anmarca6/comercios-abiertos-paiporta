@@ -601,8 +601,7 @@
                                 <div class="form-group">
                                     <label for="businessReopenDate" class="form-label">Fecha de reapertura *</label>
                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
-                                           class="form-input" required
-                                           style="position: relative; z-index: 10;">
+                                           class="form-input" required>
                                     <div class="date-help" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
                                         Selecciona una fecha entre hoy y el 29 de octubre de 2024
                                     </div>
@@ -1221,31 +1220,46 @@
                 
                 console.log('Configurando datepicker:', { todayFormatted, maxDateFormatted });
                 
+                // Establecer atributos min y max
                 dateInput.min = todayFormatted;
                 dateInput.max = maxDateFormatted;
                 
                 // Añadir evento click para forzar la apertura del datepicker
                 dateInput.addEventListener('click', function() {
                     console.log('Click en datepicker');
-                    this.showPicker();
+                    try {
+                        this.showPicker();
+                    } catch (error) {
+                        console.log('showPicker no disponible, usando focus');
+                        this.focus();
+                    }
                 });
                 
                 // Validar fecha al cambiar
                 dateInput.addEventListener('change', function() {
                     console.log('Fecha seleccionada:', this.value);
-                    const selectedDate = new Date(this.value);
-                    const today = new Date();
-                    today.setHours(0, 0, 0, 0);
-                    
-                    if (selectedDate < today || selectedDate > maxDate) {
-                        alert('Por favor, selecciona una fecha entre hoy y el 29 de octubre de 2024.');
-                        this.value = '';
+                    if (this.value) {
+                        const selectedDate = new Date(this.value);
+                        const today = new Date();
+                        today.setHours(0, 0, 0, 0);
+                        
+                        if (selectedDate < today || selectedDate > maxDate) {
+                            alert('Por favor, selecciona una fecha entre hoy y el 29 de octubre de 2024.');
+                            this.value = '';
+                        } else {
+                            console.log('Fecha válida seleccionada:', this.value);
+                        }
                     }
                 });
                 
                 // Añadir evento focus para mejorar la experiencia
                 dateInput.addEventListener('focus', function() {
                     console.log('Focus en datepicker');
+                });
+                
+                // Añadir evento input para debugging
+                dateInput.addEventListener('input', function() {
+                    console.log('Input event:', this.value);
                 });
                 
                 console.log('Datepicker configurado correctamente');
