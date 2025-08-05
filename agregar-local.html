@@ -618,7 +618,7 @@
                                         </div>
                                         <div class="image-help">
                                             <p>📱 Puedes hacer una foto o seleccionar una imagen de tu galería</p>
-                                            <p>📏 Tamaño máximo: 2MB </p>
+                                                                                         <p>📏 Tamaño máximo: 5MB </p>
                                         </div>
                                     </div>
                                 </div>
@@ -953,7 +953,7 @@
         // Manejar carga de imagen
         function handleImageUpload(event) {
             const file = event.target.files[0];
-            const maxSize = 2 * 1024 * 1024; // 2MB
+            const maxSize = 5 * 1024 * 1024; // 5MB
             
             if (!file) return;
             
@@ -966,7 +966,7 @@
             
             // Validar tamaño
             if (file.size > maxSize) {
-                alert('La imagen es demasiado grande. El tamaño máximo es 2MB');
+                alert('La imagen es demasiado grande. El tamaño máximo es 5MB');
                 event.target.value = '';
                 return;
             }
