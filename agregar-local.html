@@ -1100,7 +1100,9 @@
             
             const formContent = document.querySelector('.form-content');
             const form = document.getElementById('addBusinessForm');
-            formContent.insertBefore(document.createElement('div').innerHTML = errorHtml, form);
+            const errorDiv = document.createElement('div');
+            errorDiv.innerHTML = errorHtml;
+            formContent.insertBefore(errorDiv, form);
         }
 
         // Inicializar EmailJS
@@ -1111,6 +1113,7 @@
         // Enviar correo electrónico
         function sendEmail(businessData) {
             const templateParams = {
+                to_email: "admin@paiporta.com", // Email del administrador
                 to_name: "Administrador",
                 from_name: businessData.nombre,
                 business_name: businessData.nombre,
@@ -1216,7 +1219,9 @@
                 
                 const formContent = document.querySelector('.form-content');
                 const form = document.getElementById('addBusinessForm');
-                formContent.insertBefore(document.createElement('div').innerHTML = errorHtml, form);
+                const errorDiv = document.createElement('div');
+                errorDiv.innerHTML = errorHtml;
+                formContent.insertBefore(errorDiv, form);
             }
         };
 
