@@ -53,9 +53,33 @@
     "tipo": "hosteleria",
     "direccion": " Carretera Benetússer, 9",
     "telefono": "+34 614 41 98 51",
-    "descripcion": "Tapas caseras, buen jamón y ambiente acogedor para disfrutar en familia o con amigos",
+    "descripcion": "Alosqué disfrutáis en un bar. Alosqué tomáis decisiones con un café. Alosqué os reunís en terrazas con amigos",
     "horario": "Lunes a sábado, 07:00 am - 22:00 pm",
     "fechaReapertura": "2025-03-12",
+    "lat": 39.4280867,
+    "lng": -0.4148560
+  },
+  {
+    "id": 6,
+    "nombre": "Pachedo & Torres Inmobiliaria Home Staging",
+    "tipo": "hogar",
+    "direccion": " Calle San Joaquín, 33",
+    "telefono": "+34 602 25 62 52",
+    "descripcion": "Soluciones al mercado inmobiliario tradicional con las mejores herramientas tecnológicas y de marketing digital",
+    "horario": "Lunes a viernes, 09:00 am - 20:00 pm",
+    "fechaReapertura": "2025-01-28",
+    "lat": 39.4280867,
+    "lng": -0.4148560
+  },
+  {
+    "id": 7,
+    "nombre": "Passarela",
+    "tipo": "papeleria",
+    "direccion": " Calle San Eduardo, 23",
+    "telefono": "+34 960 17 09 48",
+    "descripcion": "Librería y papelería familiar en el corazón de Paiporta, con la ilusión de acercar libros, material escolar y regalos a nuestra comunidad",
+    "horario": "Lunes a viernes, 09:00 am - 20:00 pm",
+    "fechaReapertura": "2025-03-13",
     "lat": 39.4280867,
     "lng": -0.4148560
   }
