@@ -6,6 +6,10 @@
       "use": "@vercel/static"
     },
     {
+      "src": "*.json",
+      "use": "@vercel/static"
+    },
+    {
       "src": "data/**",
       "use": "@vercel/static"
     },
