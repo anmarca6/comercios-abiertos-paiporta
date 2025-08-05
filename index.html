@@ -278,157 +278,7 @@
             text-align: center;
         }
 
-        /* Filtros */
-        .filters-section {
-            padding: var(--space-lg);
-            margin-bottom: var(--space-xl);
-        }
 
-        .filters-container {
-            display: flex;
-            gap: var(--space-sm);
-            flex-wrap: wrap;
-            align-items: center;
-        }
-
-        .filter-chip {
-            padding: 0.5rem 1rem;
-            border-radius: 50px;
-            border: 2px solid var(--border);
-            background: white;
-            color: var(--text-secondary);
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            font-size: 0.9rem;
-            font-weight: 500;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .filter-chip:hover {
-            border-color: var(--primary-solid);
-            color: var(--primary-solid);
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* Hover effects for category filters */
-        .filter-chip.agrupaciones:hover {
-            border-color: #06b6d4;
-            color: #06b6d4;
-            background: rgba(6, 182, 212, 0.1);
-        }
-
-        .filter-chip.alimentacion:hover {
-            border-color: #10b981;
-            color: #10b981;
-            background: rgba(16, 185, 129, 0.1);
-        }
-
-        .filter-chip.carburantes:hover {
-            border-color: #f59e0b;
-            color: #f59e0b;
-            background: rgba(245, 158, 11, 0.1);
-        }
-
-        .filter-chip.drogueria:hover {
-            border-color: #8b5cf6;
-            color: #8b5cf6;
-            background: rgba(139, 92, 246, 0.1);
-        }
-
-        .filter-chip.finanzas:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .filter-chip.flores:hover {
-            border-color: #84cc16;
-            color: #84cc16;
-            background: rgba(132, 204, 22, 0.1);
-        }
-
-        .filter-chip.hosteleria:hover {
-            border-color: #ec4899;
-            color: #ec4899;
-            background: rgba(236, 72, 153, 0.1);
-        }
-
-        .filter-chip.informatica:hover {
-            border-color: #6366f1;
-            color: #6366f1;
-            background: rgba(99, 102, 241, 0.1);
-        }
-
-        .filter-chip.joyeria:hover {
-            border-color: #fbbf24;
-            color: #fbbf24;
-            background: rgba(251, 191, 36, 0.1);
-        }
-
-        .filter-chip.hogar:hover {
-            border-color: #f97316;
-            color: #f97316;
-            background: rgba(249, 115, 22, 0.1);
-        }
-
-        .filter-chip.mayoristas:hover {
-            border-color: #64748b;
-            color: #64748b;
-            background: rgba(100, 116, 139, 0.1);
-        }
-
-        .filter-chip.moda:hover {
-            border-color: #ec4899;
-            color: #ec4899;
-            background: rgba(236, 72, 153, 0.1);
-        }
-
-        .filter-chip.ocio:hover {
-            border-color: #84cc16;
-            color: #84cc16;
-            background: rgba(132, 204, 22, 0.1);
-        }
-
-        .filter-chip.papeleria:hover {
-            border-color: #06b6d4;
-            color: #06b6d4;
-            background: rgba(6, 182, 212, 0.1);
-        }
-
-        .filter-chip.salud:hover {
-            border-color: #ef4444;
-            color: #ef4444;
-            background: rgba(239, 68, 68, 0.1);
-        }
-
-        .filter-chip.servicios:hover {
-            border-color: #3b82f6;
-            color: #3b82f6;
-            background: rgba(59, 130, 246, 0.1);
-        }
-
-        .filter-chip.tabaco:hover {
-            border-color: #7c3aed;
-            color: #7c3aed;
-            background: rgba(124, 58, 237, 0.1);
-        }
-
-        .filter-chip.automocion:hover {
-            border-color: #dc2626;
-            color: #dc2626;
-            background: rgba(220, 38, 38, 0.1);
-        }
-
-        .filter-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary-solid);
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
 
         /* Búsqueda */
         .search-container {
@@ -891,12 +741,7 @@
                     </div>
                 </section>
 
-                <!-- Filtros por categoría -->
-                <section class="filters-section">
-                    <div class="filters-container" id="filtersContainer">
-                        <!-- Los filtros se generan dinámicamente -->
-                    </div>
-                </section>
+
 
             <!-- Grid de comercios -->
             <section class="businesses-grid" id="businessGrid">
@@ -1128,47 +973,7 @@
 
 
 
-        // Crear filtros dinámicamente
-        const createFilters = () => {
-            const container = document.getElementById('filtersContainer');
-            const tiposUnicos = ['todos', ...new Set(comercios.map(comercio => comercio.tipo))];
-            
-            container.innerHTML = '';
-            
-            tiposUnicos.forEach(filtro => {
-                const filterButton = document.createElement('button');
-                filterButton.className = `filter-chip ${filtro !== 'todos' ? filtro : ''} ${activeFilter === filtro ? 'active' : ''}`;
-                filterButton.textContent = formatFilterLabel(filtro);
-                
-                if (filtro !== 'todos') {
-                    const count = comercios.filter(c => c.tipo === filtro).length;
-                    filterButton.textContent += ` (${count})`;
-                }
-                
-                if (filtro === 'todos') {
-                    filterButton.textContent += ` (${comercios.length})`;
-                }
-                
-                filterButton.onclick = () => {
-                    activeFilter = filtro;
-                    filterBusinesses();
-                    updateFilters();
-                };
-                
-                container.appendChild(filterButton);
-            });
-        };
 
-        // Actualizar filtros
-        const updateFilters = () => {
-            const filterButtons = document.querySelectorAll('.filter-chip');
-            filterButtons.forEach(button => {
-                button.classList.remove('active');
-                if (button.textContent.includes(formatFilterLabel(activeFilter))) {
-                    button.classList.add('active');
-                }
-            });
-        };
 
         // Filtrar comercios
         const filterBusinesses = () => {
@@ -1177,14 +982,9 @@
             
             let filteredComercios = comercios;
             
-            // Aplicar filtro de categoría
-            if (activeFilter !== 'todos') {
-                filteredComercios = comercios.filter(comercio => comercio.tipo === activeFilter);
-            }
-            
-            // Aplicar búsqueda
+            // Aplicar solo búsqueda por texto
             if (searchTerm) {
-                filteredComercios = filteredComercios.filter(comercio => 
+                filteredComercios = comercios.filter(comercio => 
                     comercio.nombre.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     comercio.direccion.toLowerCase().includes(searchTerm.toLowerCase()) ||
                     comercio.descripcion?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -1325,7 +1125,6 @@
 
         // Inicializar aplicación
         const initApp = () => {
-            createFilters();
             filterBusinesses();
             setupSearch();
             setupPageTransition();
@@ -1336,7 +1135,6 @@
         let comercios = [];
         let filteredComercios = [];
         let searchTerm = '';
-        let activeFilter = 'todos';
 
         // Cargar comercios
         async function loadComercios() {
