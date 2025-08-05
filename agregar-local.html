@@ -414,11 +414,29 @@
         .btn-primary {
             background: var(--primary);
             color: white;
+            transition: all 0.3s ease;
         }
 
         .btn-primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary:disabled {
+            background: #e5e7eb !important;
+            color: #9ca3af !important;
+            cursor: not-allowed !important;
+            transform: none !important;
+            box-shadow: none !important;
+            border: 1px solid #d1d5db !important;
+            opacity: 0.6 !important;
+        }
+
+        .btn-primary:disabled:hover {
+            transform: none !important;
+            box-shadow: none !important;
+            background: #e5e7eb !important;
+            color: #9ca3af !important;
         }
 
         .btn-secondary {
@@ -1066,15 +1084,6 @@
             // Habilitar/deshabilitar botón
             if (submitBtn) {
                 submitBtn.disabled = !isFormValid;
-                
-                // Cambiar estilo visual del botón
-                if (isFormValid) {
-                    submitBtn.style.opacity = '1';
-                    submitBtn.style.cursor = 'pointer';
-                } else {
-                    submitBtn.style.opacity = '0.5';
-                    submitBtn.style.cursor = 'not-allowed';
-                }
             }
         }
 
