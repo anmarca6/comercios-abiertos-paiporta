@@ -1107,13 +1107,17 @@
 
         // Inicializar EmailJS
         function initEmailJS() {
-            emailjs.init("MPeUF-H9IEgdYofQB"); // Reemplazar con tu User ID de EmailJS
+            try {
+                emailjs.init("MPeUF-H9IEgdYofQB"); // Reemplazar con tu User ID de EmailJS
+                console.log('EmailJS inicializado correctamente');
+            } catch (error) {
+                console.error('Error al inicializar EmailJS:', error);
+            }
         }
 
         // Enviar correo electrónico
         function sendEmail(businessData) {
             const templateParams = {
-                to_email: "admin@paiporta.com", // Email del administrador
                 to_name: "Administrador",
                 from_name: businessData.nombre,
                 business_name: businessData.nombre,
@@ -1188,7 +1192,13 @@
                 localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
 
                 // Enviar correo electrónico
-                await sendEmail(businessData);
+                try {
+                    await sendEmail(businessData);
+                    console.log('Email enviado correctamente');
+                } catch (emailError) {
+                    console.error('Error específico de EmailJS:', emailError);
+                    throw new Error(`Error al enviar email: ${emailError.message || 'Error desconocido'}`);
+                }
 
                 // Mostrar mensaje de éxito
                 const formContent = document.querySelector('.form-content');
