@@ -603,7 +603,7 @@
                                     <input type="date" id="businessReopenDate" name="fechaReapertura" 
                                            class="form-input" required>
                                     <div class="date-help" style="font-size: 0.8rem; color: var(--text-secondary); margin-top: 0.25rem;">
-                                        Selecciona una fecha entre hoy y el 29 de octubre de 2024
+                                        Selecciona la fecha de reapertura de tu negocio
                                     </div>
                                 </div>
 
@@ -617,8 +617,8 @@
                                             <button type="button" class="remove-image-btn" id="removeImageBtn">🗑️ Eliminar</button>
                                         </div>
                                         <div class="image-help">
-                                            <p>📱 Puedes tomar una foto con la cámara o seleccionar una imagen de tu galería</p>
-                                            <p>📏 Tamaño máximo: 2MB | Formatos: JPG, PNG, WebP</p>
+                                            <p>📱 Puedes hacer una foto o seleccionar una imagen de tu galería</p>
+                                            <p>📏 Tamaño máximo: 2MB </p>
                                         </div>
                                     </div>
                                 </div>
@@ -1029,17 +1029,6 @@
             const fechaReapertura = document.getElementById('businessReopenDate').value;
             if (!fechaReapertura) {
                 errors.push('Debes seleccionar una fecha de reapertura');
-            } else {
-                const selectedDate = new Date(fechaReapertura);
-                const today = new Date();
-                today.setHours(0, 0, 0, 0);
-                const maxDate = new Date('2024-10-29');
-                
-                if (selectedDate < today) {
-                    errors.push('La fecha de reapertura no puede ser anterior a hoy');
-                } else if (selectedDate > maxDate) {
-                    errors.push('La fecha de reapertura no puede ser posterior al 29 de octubre de 2024');
-                }
             }
             
             // Validar dirección
@@ -1210,19 +1199,7 @@
             // Configurar datepicker nativo
             const dateInput = document.getElementById('businessReopenDate');
             if (dateInput) {
-                // Establecer fecha mínima (hoy) y máxima (29 de octubre de 2024)
-                const today = new Date();
-                const maxDate = new Date('2024-10-29');
-                
-                // Formatear fechas para el input type="date"
-                const todayFormatted = today.toISOString().split('T')[0];
-                const maxDateFormatted = maxDate.toISOString().split('T')[0];
-                
-                console.log('Configurando datepicker:', { todayFormatted, maxDateFormatted });
-                
-                // Establecer atributos min y max
-                dateInput.min = todayFormatted;
-                dateInput.max = maxDateFormatted;
+                console.log('Configurando datepicker sin restricciones...');
                 
                 // Añadir evento click para forzar la apertura del datepicker
                 dateInput.addEventListener('click', function() {
@@ -1235,21 +1212,9 @@
                     }
                 });
                 
-                // Validar fecha al cambiar
+                // Evento de cambio para debugging
                 dateInput.addEventListener('change', function() {
                     console.log('Fecha seleccionada:', this.value);
-                    if (this.value) {
-                        const selectedDate = new Date(this.value);
-                        const today = new Date();
-                        today.setHours(0, 0, 0, 0);
-                        
-                        if (selectedDate < today || selectedDate > maxDate) {
-                            alert('Por favor, selecciona una fecha entre hoy y el 29 de octubre de 2024.');
-                            this.value = '';
-                        } else {
-                            console.log('Fecha válida seleccionada:', this.value);
-                        }
-                    }
                 });
                 
                 // Añadir evento focus para mejorar la experiencia
@@ -1262,7 +1227,7 @@
                     console.log('Input event:', this.value);
                 });
                 
-                console.log('Datepicker configurado correctamente');
+                console.log('Datepicker configurado correctamente sin restricciones');
             } else {
                 console.error('Elemento datepicker no encontrado');
             }
