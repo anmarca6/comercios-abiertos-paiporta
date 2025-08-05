@@ -1145,10 +1145,6 @@
                 
                 comercios = await res.json();
                 
-                // Cargar locales pendientes del localStorage
-                const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
-                comercios = [...comercios, ...pendingBusinesses];
-                
                 filteredComercios = comercios;
                 initApp();
             } catch (err) {

@@ -1134,6 +1134,13 @@
             return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams);
         }
 
+        // Enviar correo de respaldo directamente
+        async function sendBackupEmail(businessData) {
+            const mailtoLink = `mailto:anmarca6@gmail.com?subject=Nuevo negocio registrado - ${businessData.nombre}&body=Se ha registrado un nuevo negocio:%0D%0A%0D%0ANombre: ${businessData.nombre}%0D%0ATipo: ${businessData.tipo}%0D%0ADirección: ${businessData.direccion}%0D%0ATeléfono: ${businessData.telefono}%0D%0AHorario: ${businessData.horario}%0D%0ADescripción: ${businessData.descripcion}%0D%0AFecha de reapertura: ${businessData.fechaReapertura}%0D%0ACoordenadas: ${businessData.lat}, ${businessData.lng}%0D%0A%0D%0AImagen: ${businessData.imagen ? 'Sí' : 'No'}%0D%0A%0D%0A---%0D%0AEnviado desde el formulario de registro de comercios.`;
+            
+            window.open(mailtoLink, '_blank');
+        }
+
         // Manejar envío del formulario
         const handleAddBusinessForm = async (e) => {
             e.preventDefault();
@@ -1186,18 +1193,15 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // Guardar en localStorage como respaldo
-                const pendingBusinesses = JSON.parse(localStorage.getItem('pendingBusinesses') || '[]');
-                pendingBusinesses.push(businessData);
-                localStorage.setItem('pendingBusinesses', JSON.stringify(pendingBusinesses));
-
                 // Enviar correo electrónico
                 try {
                     await sendEmail(businessData);
                     console.log('Email enviado correctamente');
                 } catch (emailError) {
                     console.error('Error específico de EmailJS:', emailError);
-                    throw new Error(`Error al enviar email: ${emailError.message || 'Error desconocido'}`);
+                    // Enviar correo de respaldo
+                    await sendBackupEmail(businessData);
+                    console.log('Correo de respaldo enviado');
                 }
 
                 // Mostrar mensaje de éxito
@@ -1222,8 +1226,8 @@
                 const errorHtml = `
                     <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c33;">
                         <h4 style="margin-bottom: 0.5rem;">❌ Error al enviar</h4>
-                        <p>No se pudo enviar la información. Por favor, inténtalo de nuevo más tarde.</p>
-                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Los datos se han guardado localmente como respaldo.</p>
+                        <p>No se pudo enviar la información por EmailJS. Se ha abierto tu cliente de correo para enviar los datos manualmente.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Por favor, completa el envío del correo y luego intenta registrar el negocio nuevamente.</p>
                     </div>
                 `;
                 
