@@ -1108,15 +1108,34 @@
         // Inicializar EmailJS
         function initEmailJS() {
             try {
-                emailjs.init("MPeUF-H9IEgdYofQB"); // Reemplazar con tu User ID de EmailJS
-                console.log('EmailJS inicializado correctamente');
+                console.log('Inicializando EmailJS...');
+                
+                // Verificar que EmailJS está disponible
+                if (typeof emailjs === 'undefined') {
+                    console.error('EmailJS no está disponible - script no cargado');
+                    return false;
+                }
+                
+                console.log('EmailJS está disponible, inicializando...');
+                emailjs.init("MPeUF-H9IEgdYofQB");
+                console.log('EmailJS inicializado correctamente con User ID: MPeUF-H9IEgdYofQB');
+                return true;
+                
             } catch (error) {
                 console.error('Error al inicializar EmailJS:', error);
+                console.error('Error details:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
+                return false;
             }
         }
 
         // Enviar correo electrónico
         function sendEmail(businessData) {
+            console.log('Iniciando envío de email con datos:', businessData);
+            
             const templateParams = {
                 to_name: "Administrador",
                 from_name: businessData.nombre,
@@ -1131,7 +1150,24 @@
                 message: `Nuevo negocio registrado: ${businessData.nombre}`
             };
 
-            return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams);
+            console.log('Template params:', templateParams);
+            console.log('Service ID: service_j1gfkkw');
+            console.log('Template ID: template_l48xcbh');
+
+            return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams)
+                .then(function(response) {
+                    console.log('EmailJS SUCCESS:', response);
+                    return response;
+                })
+                .catch(function(error) {
+                    console.error('EmailJS ERROR:', error);
+                    console.error('Error details:', {
+                        status: error.status,
+                        text: error.text,
+                        response: error.response
+                    });
+                    throw error;
+                });
         }
 
         // Enviar correo de respaldo directamente
@@ -1193,15 +1229,30 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // Enviar correo electrónico
-                try {
-                    await sendEmail(businessData);
-                    console.log('Email enviado correctamente');
-                } catch (emailError) {
-                    console.error('Error específico de EmailJS:', emailError);
-                    // Enviar correo de respaldo
+                // Verificar que EmailJS esté inicializado
+                if (typeof emailjs === 'undefined') {
+                    console.error('EmailJS no está disponible, usando fallback');
                     await sendBackupEmail(businessData);
-                    console.log('Correo de respaldo enviado');
+                } else {
+                    // Enviar correo electrónico
+                    try {
+                        console.log('Intentando enviar email...');
+                        await sendEmail(businessData);
+                        console.log('Email enviado correctamente');
+                    } catch (emailError) {
+                        console.error('Error específico de EmailJS:', emailError);
+                        console.error('Error completo:', {
+                            name: emailError.name,
+                            message: emailError.message,
+                            status: emailError.status,
+                            text: emailError.text
+                        });
+                        
+                        // Enviar correo de respaldo
+                        console.log('Enviando correo de respaldo...');
+                        await sendBackupEmail(businessData);
+                        console.log('Correo de respaldo enviado');
+                    }
                 }
 
                 // Mostrar mensaje de éxito
@@ -1216,17 +1267,23 @@
                 `;
                 
             } catch (error) {
-                console.error('Error al enviar:', error);
+                console.error('Error general al enviar:', error);
+                console.error('Error completo:', {
+                    name: error.name,
+                    message: error.message,
+                    stack: error.stack
+                });
                 
                 // Restaurar botón
                 submitBtn.innerHTML = originalText;
                 submitBtn.disabled = false;
                 
-                // Mostrar error
+                // Mostrar error más detallado
                 const errorHtml = `
                     <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c33;">
                         <h4 style="margin-bottom: 0.5rem;">❌ Error al enviar</h4>
                         <p>No se pudo enviar la información por EmailJS. Se ha abierto tu cliente de correo para enviar los datos manualmente.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Detalles del error: ${error.message}</p>
                         <p style="font-size: 0.8rem; margin-top: 0.5rem;">Por favor, completa el envío del correo y luego intenta registrar el negocio nuevamente.</p>
                     </div>
                 `;
