@@ -1136,18 +1136,45 @@
         function sendEmail(businessData) {
             console.log('Iniciando envío de email con datos:', businessData);
             
+            // Formatear el tipo de negocio para mejor presentación
+            const formatTipo = (tipo) => {
+                const tipos = {
+                    'agrupaciones': 'Agrupaciones comerciales',
+                    'alimentacion': 'Alimentación',
+                    'carburantes': 'Carburantes',
+                    'drogueria': 'Droguería y perfumería',
+                    'finanzas': 'Finanzas y gestión',
+                    'flores': 'Flores, jardinería y animales',
+                    'hosteleria': 'Hostelería y turismo',
+                    'informatica': 'Informática, imagen y sonido',
+                    'joyeria': 'Joyería y relojería',
+                    'hogar': 'Hogar y decoración',
+                    'mayoristas': 'Mayoristas',
+                    'moda': 'Moda y complementos',
+                    'ocio': 'Ocio, deportes y aficiones',
+                    'papeleria': 'Papelería, librería y quioscos',
+                    'salud': 'Salud y belleza',
+                    'servicios': 'Servicios',
+                    'tabaco': 'Tabaco y loterías',
+                    'automocion': 'Automoción'
+                };
+                return tipos[tipo] || tipo;
+            };
+            
             const templateParams = {
                 to_name: "Administrador",
                 from_name: businessData.nombre,
                 business_name: businessData.nombre,
-                business_type: businessData.tipo,
+                business_type: formatTipo(businessData.tipo),
                 business_address: businessData.direccion,
                 business_phone: businessData.telefono,
                 business_hours: businessData.horario,
                 business_description: businessData.descripcion,
                 business_reopen_date: businessData.fechaReapertura,
                 business_coordinates: `${businessData.lat}, ${businessData.lng}`,
-                message: `Nuevo negocio registrado: ${businessData.nombre}`
+                message: `Nuevo negocio registrado: ${businessData.nombre}`,
+                timestamp: new Date().toLocaleString('es-ES'),
+                has_image: businessData.imagen ? 'Sí' : 'No'
             };
 
             console.log('Template params:', templateParams);
@@ -1170,12 +1197,7 @@
                 });
         }
 
-        // Enviar correo de respaldo directamente
-        async function sendBackupEmail(businessData) {
-            const mailtoLink = `mailto:anmarca6@gmail.com?subject=Nuevo negocio registrado - ${businessData.nombre}&body=Se ha registrado un nuevo negocio:%0D%0A%0D%0ANombre: ${businessData.nombre}%0D%0ATipo: ${businessData.tipo}%0D%0ADirección: ${businessData.direccion}%0D%0ATeléfono: ${businessData.telefono}%0D%0AHorario: ${businessData.horario}%0D%0ADescripción: ${businessData.descripcion}%0D%0AFecha de reapertura: ${businessData.fechaReapertura}%0D%0ACoordenadas: ${businessData.lat}, ${businessData.lng}%0D%0A%0D%0AImagen: ${businessData.imagen ? 'Sí' : 'No'}%0D%0A%0D%0A---%0D%0AEnviado desde el formulario de registro de comercios.`;
-            
-            window.open(mailtoLink, '_blank');
-        }
+
 
         // Manejar envío del formulario
         const handleAddBusinessForm = async (e) => {
@@ -1202,16 +1224,19 @@
             
             try {
                 const formData = new FormData(e.target);
+                
                 // Procesar imagen si existe
                 const imageFile = formData.get('imagen');
                 let imageData = null;
                 
                 if (imageFile && imageFile.size > 0) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        imageData = e.target.result;
-                    };
-                    reader.readAsDataURL(imageFile);
+                    imageData = await new Promise((resolve) => {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            resolve(e.target.result);
+                        };
+                        reader.readAsDataURL(imageFile);
+                    });
                 }
 
                 const businessData = {
@@ -1229,50 +1254,74 @@
                     timestamp: new Date().toISOString()
                 };
 
-                // Verificar que EmailJS esté inicializado
-                if (typeof emailjs === 'undefined') {
-                    console.error('EmailJS no está disponible, usando fallback');
-                    await sendBackupEmail(businessData);
-                } else {
-                    // Enviar correo electrónico
+                console.log('Datos del negocio preparados:', businessData);
+
+                // Intentar enviar correo con EmailJS
+                let emailSent = false;
+                
+                if (typeof emailjs !== 'undefined') {
                     try {
-                        console.log('Intentando enviar email...');
+                        console.log('Intentando enviar email con EmailJS...');
                         await sendEmail(businessData);
-                        console.log('Email enviado correctamente');
+                        console.log('Email enviado correctamente con EmailJS');
+                        emailSent = true;
                     } catch (emailError) {
-                        console.error('Error específico de EmailJS:', emailError);
-                        console.error('Error completo:', {
+                        console.error('Error al enviar con EmailJS:', emailError);
+                        console.error('Detalles del error:', {
                             name: emailError.name,
                             message: emailError.message,
                             status: emailError.status,
                             text: emailError.text
                         });
-                        
-                        // Enviar correo de respaldo
-                        console.log('Enviando correo de respaldo...');
-                        await sendBackupEmail(businessData);
-                        console.log('Correo de respaldo enviado');
                     }
+                } else {
+                    console.error('EmailJS no está disponible');
                 }
 
-                // Mostrar mensaje de éxito
-                const formContent = document.querySelector('.form-content');
-                formContent.innerHTML = `
-                    <div class="success-message">
-                        <div class="success-icon">✅</div>
-                        <h3 class="success-title">¡Información enviada correctamente!</h3>
-                        <p class="success-description">Tu negocio ha sido registrado y se ha enviado un correo al administrador para su validación. Aparecerá en el directorio una vez sea revisado.</p>
-                        <a href="index.html" class="btn btn-primary">Volver al directorio</a>
-                    </div>
-                `;
+                // Si EmailJS falló, mostrar mensaje de éxito pero con información sobre el fallo
+                if (!emailSent) {
+                    console.log('EmailJS no funcionó, mostrando mensaje de éxito con información de contacto');
+                    
+                    // Mostrar mensaje de éxito con información de contacto manual
+                    const formContent = document.querySelector('.form-content');
+                    formContent.innerHTML = `
+                        <div class="success-message">
+                            <div class="success-icon">✅</div>
+                            <h3 class="success-title">¡Información registrada correctamente!</h3>
+                            <p class="success-description">
+                                Tu negocio ha sido registrado en nuestro sistema. 
+                                Sin embargo, no se pudo enviar el correo automáticamente al administrador.
+                            </p>
+                            <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
+                                <h4 style="color: #0c4a6e; margin-bottom: 0.5rem;">📧 Información para contacto manual:</h4>
+                                <p style="color: #0c4a6e; font-size: 0.9rem; margin-bottom: 0.5rem;">
+                                    <strong>Email del administrador:</strong> anmarca6@gmail.com
+                                </p>
+                                <p style="color: #0c4a6e; font-size: 0.9rem;">
+                                    <strong>Asunto sugerido:</strong> Nuevo negocio registrado - ${businessData.nombre}
+                                </p>
+                            </div>
+                            <p style="font-size: 0.9rem; color: #6b7280;">
+                                Por favor, envía un correo manual con los datos de tu negocio para que pueda ser validado y añadido al directorio.
+                            </p>
+                            <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+                        </div>
+                    `;
+                } else {
+                    // Mostrar mensaje de éxito normal
+                    const formContent = document.querySelector('.form-content');
+                    formContent.innerHTML = `
+                        <div class="success-message">
+                            <div class="success-icon">✅</div>
+                            <h3 class="success-title">¡Información enviada correctamente!</h3>
+                            <p class="success-description">Tu negocio ha sido registrado y se ha enviado un correo al administrador para su validación. Aparecerá en el directorio una vez sea revisado.</p>
+                            <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+                        </div>
+                    `;
+                }
                 
             } catch (error) {
-                console.error('Error general al enviar:', error);
-                console.error('Error completo:', {
-                    name: error.name,
-                    message: error.message,
-                    stack: error.stack
-                });
+                console.error('Error general al procesar el formulario:', error);
                 
                 // Restaurar botón
                 submitBtn.innerHTML = originalText;
@@ -1281,10 +1330,10 @@
                 // Mostrar error más detallado
                 const errorHtml = `
                     <div style="background: #fee; border: 1px solid #fcc; border-radius: 8px; padding: 1rem; margin-bottom: 1rem; color: #c33;">
-                        <h4 style="margin-bottom: 0.5rem;">❌ Error al enviar</h4>
-                        <p>No se pudo enviar la información por EmailJS. Se ha abierto tu cliente de correo para enviar los datos manualmente.</p>
+                        <h4 style="margin-bottom: 0.5rem;">❌ Error al procesar el formulario</h4>
+                        <p>Ha ocurrido un error inesperado al procesar tu solicitud.</p>
                         <p style="font-size: 0.8rem; margin-top: 0.5rem;">Detalles del error: ${error.message}</p>
-                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Por favor, completa el envío del correo y luego intenta registrar el negocio nuevamente.</p>
+                        <p style="font-size: 0.8rem; margin-top: 0.5rem;">Por favor, intenta nuevamente o contacta con el administrador.</p>
                     </div>
                 `;
                 

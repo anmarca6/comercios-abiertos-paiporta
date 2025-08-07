@@ -20,18 +20,77 @@
 3. Usa esta plantilla como base:
 
 ```html
-<h2>Nuevo negocio registrado en Paiporta</h2>
-
-<p><strong>Nombre del negocio:</strong> {{business_name}}</p>
-<p><strong>Categoría:</strong> {{business_type}}</p>
-<p><strong>Dirección:</strong> {{business_address}}</p>
-<p><strong>Teléfono:</strong> {{business_phone}}</p>
-<p><strong>Horario:</strong> {{business_hours}}</p>
-<p><strong>Descripción:</strong> {{business_description}}</p>
-<p><strong>Fecha de reapertura:</strong> {{business_reopen_date}}</p>
-<p><strong>Coordenadas:</strong> {{business_coordinates}}</p>
-
-<p><em>Este negocio ha sido registrado y está pendiente de validación.</em></p>
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .header { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #06b6d4 100%); color: white; padding: 20px; text-align: center; }
+        .content { padding: 20px; }
+        .business-info { background: #f8f9fa; border-left: 4px solid #3b82f6; padding: 15px; margin: 15px 0; }
+        .field { margin: 10px 0; }
+        .field strong { color: #1e40af; }
+        .footer { background: #f1f5f9; padding: 15px; text-align: center; font-size: 0.9em; color: #64748b; }
+        .timestamp { font-size: 0.8em; color: #6b7280; margin-top: 10px; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>🏪 Nuevo negocio registrado en Paiporta</h1>
+        <p>Se ha registrado un nuevo comercio en el directorio</p>
+    </div>
+    
+    <div class="content">
+        <div class="business-info">
+            <h2>{{business_name}}</h2>
+            
+            <div class="field">
+                <strong>📋 Categoría:</strong> {{business_type}}
+            </div>
+            
+            <div class="field">
+                <strong>📍 Dirección:</strong> {{business_address}}
+            </div>
+            
+            <div class="field">
+                <strong>📞 Teléfono:</strong> {{business_phone}}
+            </div>
+            
+            <div class="field">
+                <strong>🕒 Horario:</strong> {{business_hours}}
+            </div>
+            
+            <div class="field">
+                <strong>📝 Descripción:</strong> {{business_description}}
+            </div>
+            
+            <div class="field">
+                <strong>🎉 Fecha de reapertura:</strong> {{business_reopen_date}}
+            </div>
+            
+            <div class="field">
+                <strong>🗺️ Coordenadas:</strong> {{business_coordinates}}
+            </div>
+            
+            <div class="field">
+                <strong>📸 Imagen incluida:</strong> {{has_image}}
+            </div>
+        </div>
+        
+        <p><em>Este negocio ha sido registrado a través del formulario web y está pendiente de validación antes de aparecer en el directorio público.</em></p>
+        
+        <div class="timestamp">
+            <strong>📅 Registrado el:</strong> {{timestamp}}
+        </div>
+    </div>
+    
+    <div class="footer">
+        <p>Comercios Paiporta - Apoya el comercio local</p>
+        <p>Solo el pueblo salva al pueblo</p>
+    </div>
+</body>
+</html>
 ```
 
 4. Guarda la plantilla y copia el **Template ID**
@@ -93,4 +152,23 @@ function sendEmail(businessData) {
 - **Error "EmailJS not defined"**: Verifica que el script de EmailJS esté cargado
 - **Error de autenticación**: Verifica que el Service ID sea correcto
 - **No se reciben correos**: Verifica la configuración del servicio de correo
-- **Error de plantilla**: Verifica que el Template ID sea correcto 
+- **Error de plantilla**: Verifica que el Template ID sea correcto
+
+## ✅ Mejoras implementadas
+
+### Proceso mejorado de envío de correos:
+1. **EmailJS como método principal**: El formulario intenta enviar el correo usando EmailJS
+2. **Manejo de errores robusto**: Si EmailJS falla, se muestra un mensaje de éxito con información de contacto manual
+3. **Sin dependencia del cliente de correo**: Se eliminó la función que abría el cliente de correo electrónico
+4. **Mejor experiencia de usuario**: Mensajes claros sobre el estado del envío
+
+### Plantilla de correo mejorada:
+- Diseño HTML profesional con estilos CSS
+- Información organizada y fácil de leer
+- Incluye timestamp y estado de la imagen
+- Formato consistente con la identidad visual del sitio
+
+### Validación mejorada:
+- Procesamiento asíncrono de imágenes
+- Mejor manejo de errores
+- Mensajes de error más descriptivos 
