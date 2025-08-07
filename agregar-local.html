@@ -1138,13 +1138,11 @@
         function sendEmail(businessData) {
             console.log('Iniciando envío de email con datos:', businessData);
             
-            // Función para sanitizar datos y evitar corrupción de variables
+            // Función para sanitizar datos de forma más conservadora
             const sanitizeData = (data) => {
                 if (!data) return '';
                 return String(data)
-                    .replace(/[<>]/g, '') // Remover caracteres HTML problemáticos
-                    .replace(/"/g, '"') // Reemplazar comillas dobles
-                    .replace(/'/g, "'") // Reemplazar comillas simples
+                    .replace(/[<>]/g, '') // Solo remover caracteres HTML problemáticos
                     .replace(/\n/g, ' ') // Reemplazar saltos de línea con espacios
                     .replace(/\r/g, ' ') // Reemplazar retornos de carro
                     .replace(/\t/g, ' ') // Reemplazar tabulaciones
@@ -1178,16 +1176,16 @@
             
             const templateParams = {
                 to_name: "Administrador",
-                from_name: sanitizeData(businessData.nombre),
-                business_name: sanitizeData(businessData.nombre),
-                business_type: sanitizeData(formatTipo(businessData.tipo)),
-                business_address: sanitizeData(businessData.direccion),
-                business_phone: sanitizeData(businessData.telefono),
-                business_hours: sanitizeData(businessData.horario),
-                business_description: sanitizeData(businessData.descripcion),
-                business_reopen_date: sanitizeData(businessData.fechaReapertura),
-                business_coordinates: sanitizeData(`${businessData.lat}, ${businessData.lng}`),
-                message: sanitizeData(`Nuevo negocio registrado: ${businessData.nombre}`),
+                from_name: businessData.nombre || '',
+                business_name: businessData.nombre || '',
+                business_type: formatTipo(businessData.tipo) || '',
+                business_address: businessData.direccion || '',
+                business_phone: businessData.telefono || '',
+                business_hours: businessData.horario || '',
+                business_description: businessData.descripcion || '',
+                business_reopen_date: businessData.fechaReapertura || '',
+                business_coordinates: `${businessData.lat || ''}, ${businessData.lng || ''}`,
+                message: `Nuevo negocio registrado: ${businessData.nombre || ''}`,
                 timestamp: new Date().toLocaleString('es-ES'),
                 has_image: businessData.imagen ? 'Sí' : 'No'
             };
