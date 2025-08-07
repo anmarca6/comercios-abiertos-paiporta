@@ -1162,9 +1162,9 @@
             };
             
             const templateParams = {
-                to_email: "anmarca6@gmail.com",
                 to_name: "Administrador",
                 from_name: businessData.nombre,
+                reply_to: "anmarca6@gmail.com",
                 business_name: businessData.nombre,
                 business_type: formatTipo(businessData.tipo),
                 business_address: businessData.direccion,
@@ -1182,6 +1182,7 @@
             console.log('Service ID: service_j1gfkkw');
             console.log('Template ID: template_l48xcbh');
             console.log('EmailJS disponible:', typeof emailjs !== 'undefined');
+            console.log('EmailJS version:', emailjs.version);
 
             return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams)
                 .then(function(response) {
