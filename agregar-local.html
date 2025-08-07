@@ -1027,8 +1027,8 @@
             
             // Validar descripción
             const descripcion = document.getElementById('businessDescription').value.trim();
-            if (!descripcion || descripcion.length < 10) {
-                errors.push('La descripción debe tener al menos 10 caracteres');
+            if (!descripcion) {
+                errors.push('Debes especificar una descripción');
             }
             
             // Validar teléfono
@@ -1075,7 +1075,7 @@
             const isFormValid = 
                 nombre.length >= 3 &&
                 tipo !== '' &&
-                descripcion.length >= 10 &&
+                descripcion.length > 0 &&
                 telefono.length === 9 &&
                 horario.length > 0 &&
                 fechaReapertura !== '' &&
@@ -1119,7 +1119,15 @@
                 console.log('EmailJS está disponible, inicializando...');
                 emailjs.init("MPeUF-H9IEgdYofQB");
                 console.log('EmailJS inicializado correctamente con User ID: MPeUF-H9IEgdYofQB');
-                return true;
+                
+                // Verificar que la inicialización fue exitosa
+                if (emailjs.isInitialized()) {
+                    console.log('EmailJS está completamente inicializado');
+                    return true;
+                } else {
+                    console.error('EmailJS no se inicializó correctamente');
+                    return false;
+                }
                 
             } catch (error) {
                 console.error('Error al inicializar EmailJS:', error);
@@ -1180,10 +1188,13 @@
             console.log('Template params:', templateParams);
             console.log('Service ID: service_j1gfkkw');
             console.log('Template ID: template_l48xcbh');
+            console.log('EmailJS initialized:', emailjs.isInitialized());
 
             return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams)
                 .then(function(response) {
                     console.log('EmailJS SUCCESS:', response);
+                    console.log('Response status:', response.status);
+                    console.log('Response text:', response.text);
                     return response;
                 })
                 .catch(function(error) {
@@ -1191,7 +1202,8 @@
                     console.error('Error details:', {
                         status: error.status,
                         text: error.text,
-                        response: error.response
+                        response: error.response,
+                        message: error.message
                     });
                     throw error;
                 });
@@ -1258,35 +1270,46 @@
 
                 // Intentar enviar correo con EmailJS
                 let emailSent = false;
+                let emailError = null;
                 
-                if (typeof emailjs !== 'undefined') {
+                if (typeof emailjs !== 'undefined' && emailjs.isInitialized()) {
                     try {
                         console.log('Intentando enviar email con EmailJS...');
                         await sendEmail(businessData);
                         console.log('Email enviado correctamente con EmailJS');
                         emailSent = true;
-                    } catch (emailError) {
-                        console.error('Error al enviar con EmailJS:', emailError);
+                    } catch (error) {
+                        console.error('Error al enviar con EmailJS:', error);
+                        emailError = error;
                         console.error('Detalles del error:', {
-                            name: emailError.name,
-                            message: emailError.message,
-                            status: emailError.status,
-                            text: emailError.text
+                            name: error.name,
+                            message: error.message,
+                            status: error.status,
+                            text: error.text
                         });
                     }
                 } else {
-                    console.error('EmailJS no está disponible');
+                    console.error('EmailJS no está disponible o no está inicializado');
                 }
 
-                // Si EmailJS falló, mostrar mensaje de éxito pero con información sobre el fallo
-                if (!emailSent) {
-                    console.log('EmailJS no funcionó, mostrando mensaje de éxito con información de contacto');
-                    
-                    // Mostrar mensaje de éxito con información de contacto manual
-                    const formContent = document.querySelector('.form-content');
+                // Mostrar mensaje de éxito
+                const formContent = document.querySelector('.form-content');
+                
+                if (emailSent) {
+                    // Email enviado correctamente
                     formContent.innerHTML = `
                         <div class="success-message">
                             <div class="success-icon">✅</div>
+                            <h3 class="success-title">¡Información enviada correctamente!</h3>
+                            <p class="success-description">Tu negocio ha sido registrado y se ha enviado un correo al administrador para su validación. Aparecerá en el directorio una vez sea revisado.</p>
+                            <a href="index.html" class="btn btn-primary">Volver al directorio</a>
+                        </div>
+                    `;
+                } else {
+                    // Email no se pudo enviar
+                    formContent.innerHTML = `
+                        <div class="success-message">
+                            <div class="success-icon">⚠️</div>
                             <h3 class="success-title">¡Información registrada correctamente!</h3>
                             <p class="success-description">
                                 Tu negocio ha sido registrado en nuestro sistema. 
@@ -1304,17 +1327,6 @@
                             <p style="font-size: 0.9rem; color: #6b7280;">
                                 Por favor, envía un correo manual con los datos de tu negocio para que pueda ser validado y añadido al directorio.
                             </p>
-                            <a href="index.html" class="btn btn-primary">Volver al directorio</a>
-                        </div>
-                    `;
-                } else {
-                    // Mostrar mensaje de éxito normal
-                    const formContent = document.querySelector('.form-content');
-                    formContent.innerHTML = `
-                        <div class="success-message">
-                            <div class="success-icon">✅</div>
-                            <h3 class="success-title">¡Información enviada correctamente!</h3>
-                            <p class="success-description">Tu negocio ha sido registrado y se ha enviado un correo al administrador para su validación. Aparecerá en el directorio una vez sea revisado.</p>
                             <a href="index.html" class="btn btn-primary">Volver al directorio</a>
                         </div>
                     `;
@@ -1441,12 +1453,20 @@
                 removeImageBtn.addEventListener('click', removeImage);
             }
             
-            // Inicializar EmailJS
-            try {
-                initEmailJS();
-            } catch (error) {
-                console.warn('EmailJS no está configurado:', error);
-            }
+            // Inicializar EmailJS con retraso para asegurar que el script esté cargado
+            setTimeout(() => {
+                try {
+                    console.log('Intentando inicializar EmailJS...');
+                    const emailjsInitialized = initEmailJS();
+                    if (emailjsInitialized) {
+                        console.log('✅ EmailJS inicializado correctamente');
+                    } else {
+                        console.warn('⚠️ EmailJS no se pudo inicializar');
+                    }
+                } catch (error) {
+                    console.warn('EmailJS no está configurado:', error);
+                }
+            }, 1000);
 
             // Inicializar mapa con retraso para asegurar que Leaflet esté cargado
             function initializeMapWithRetry() {
