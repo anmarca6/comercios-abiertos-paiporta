@@ -1119,15 +1119,7 @@
                 console.log('EmailJS está disponible, inicializando...');
                 emailjs.init("MPeUF-H9IEgdYofQB");
                 console.log('EmailJS inicializado correctamente con User ID: MPeUF-H9IEgdYofQB');
-                
-                // Verificar que la inicialización fue exitosa
-                if (emailjs.isInitialized()) {
-                    console.log('EmailJS está completamente inicializado');
-                    return true;
-                } else {
-                    console.error('EmailJS no se inicializó correctamente');
-                    return false;
-                }
+                return true;
                 
             } catch (error) {
                 console.error('Error al inicializar EmailJS:', error);
@@ -1188,7 +1180,7 @@
             console.log('Template params:', templateParams);
             console.log('Service ID: service_j1gfkkw');
             console.log('Template ID: template_l48xcbh');
-            console.log('EmailJS initialized:', emailjs.isInitialized());
+            console.log('EmailJS disponible:', typeof emailjs !== 'undefined');
 
             return emailjs.send("service_j1gfkkw", "template_l48xcbh", templateParams)
                 .then(function(response) {
@@ -1272,7 +1264,7 @@
                 let emailSent = false;
                 let emailError = null;
                 
-                if (typeof emailjs !== 'undefined' && emailjs.isInitialized()) {
+                if (typeof emailjs !== 'undefined') {
                     try {
                         console.log('Intentando enviar email con EmailJS...');
                         await sendEmail(businessData);
