@@ -1162,6 +1162,7 @@
             };
             
             const templateParams = {
+                to_email: "anmarca6@gmail.com",
                 to_name: "Administrador",
                 from_name: businessData.nombre,
                 business_name: businessData.nombre,
@@ -1302,13 +1303,12 @@
                     formContent.innerHTML = `
                         <div class="success-message">
                             <div class="success-icon">⚠️</div>
-                            <h3 class="success-title">¡Información registrada correctamente!</h3>
+                            <h3 class="success-title">¡Ups!</h3>
                             <p class="success-description">
-                                Tu negocio ha sido registrado en nuestro sistema. 
-                                Sin embargo, no se pudo enviar el correo automáticamente al administrador.
+                                Lo sentimos, pero no se pudo enviar el correo automáticamente al administrador para validar la información antes de publicarla.
                             </p>
                             <div style="background: #f0f9ff; border: 1px solid #0ea5e9; border-radius: 8px; padding: 1rem; margin: 1rem 0;">
-                                <h4 style="color: #0c4a6e; margin-bottom: 0.5rem;">📧 Información para contacto manual:</h4>
+                                <h4 style="color: #0c4a6e; margin-bottom: 0.5rem;">📧 Información para contacto manual</h4>
                                 <p style="color: #0c4a6e; font-size: 0.9rem; margin-bottom: 0.5rem;">
                                     <strong>Email del administrador:</strong> anmarca6@gmail.com
                                 </p>
@@ -1318,6 +1318,7 @@
                             </div>
                             <p style="font-size: 0.9rem; color: #6b7280;">
                                 Por favor, envía un correo manual con los datos de tu negocio para que pueda ser validado y añadido al directorio.
+                                Lamentamos las molestias.
                             </p>
                             <a href="index.html" class="btn btn-primary">Volver al directorio</a>
                         </div>
