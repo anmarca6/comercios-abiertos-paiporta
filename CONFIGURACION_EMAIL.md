@@ -73,8 +73,43 @@
                 <strong>🗺️ Coordenadas:</strong> {{business_coordinates}}
             </div>
             
+            <!-- Imagen del negocio -->
+            {{#if business_image}}
             <div class="field">
-                <strong>📸 Imagen incluida:</strong> {{has_image}}
+                <strong>📸 Imagen del negocio:</strong>
+                <div style="margin-top: 10px;">
+                    <img src="{{business_image}}" alt="Imagen del negocio" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e5e7eb;">
+                </div>
+            </div>
+            {{else}}
+            <div class="field">
+                <strong>📸 Imagen incluida:</strong> No se ha proporcionado imagen
+            </div>
+            {{/if}}
+            
+            <!-- Enlaces de aprobación -->
+            <div class="field" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3b82f6;">
+                <strong style="color: #1e40af;">🔐 Acciones de Administración:</strong>
+                <div style="margin-top: 15px;">
+                    <p style="margin-bottom: 10px; color: #374151;">Para aprobar o rechazar este negocio, utiliza los siguientes enlaces:</p>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <a href="https://comercios-paiporta.es/approve-business.html?id={{approval_id}}&token={{approval_token}}" 
+                           style="display: inline-block; padding: 12px 24px; background: #10b981; color: white; text-decoration: none; border-radius: 6px; margin-right: 10px;">
+                            ✅ Aprobar Negocio
+                        </a>
+                        
+                        <a href="https://comercios-paiporta.es/approve-business.html?id={{approval_id}}&token={{approval_token}}&action=reject" 
+                           style="display: inline-block; padding: 12px 24px; background: #ef4444; color: white; text-decoration: none; border-radius: 6px;">
+                            ❌ Rechazar Negocio
+                        </a>
+                    </div>
+                    
+                    <p style="font-size: 0.9rem; color: #6b7280; margin-top: 15px;">
+                        <strong>Nota:</strong> Estos enlaces son seguros y únicos para esta solicitud. 
+                        Una vez procesada, el negocio aparecerá automáticamente en el directorio público.
+                    </p>
+                </div>
             </div>
         </div>
         

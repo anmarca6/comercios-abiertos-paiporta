@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprobar Negocio - Comercios Paiporta</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8f9fa;
+            margin: 0;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .business-info {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+        }
+        .business-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .approval-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 1rem;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+        .btn-approve {
+            background: #10b981;
+            color: white;
+        }
+        .btn-reject {
+            background: #ef4444;
+            color: white;
+        }
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+        }
+        .status {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .status.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+        .status.error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fecaca;
+        }
+        .status.info {
+            background: #dbeafe;
+            color: #1e40af;
+            border: 1px solid #bfdbfe;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏪 Aprobar Nuevo Negocio</h1>
+            <p>Revisa la información del negocio y decide si aprobarlo</p>
+        </div>
+        
+        <div id="loading" class="status info">
+            <strong>⏳</strong> Verificando solicitud...
+        </div>
+        
+        <div id="business-details" style="display: none;">
+            <div class="business-info">
+                <h3 id="business-name"></h3>
+                <p><strong>Tipo:</strong> <span id="business-type"></span></p>
+                <p><strong>Dirección:</strong> <span id="business-address"></span></p>
+                <p><strong>Teléfono:</strong> <span id="business-phone"></span></p>
+                <p><strong>Horario:</strong> <span id="business-hours"></span></p>
+                <p><strong>Descripción:</strong> <span id="business-description"></span></p>
+                <p><strong>Fecha de reapertura:</strong> <span id="business-reopen-date"></span></p>
+                <p><strong>Coordenadas:</strong> <span id="business-coordinates"></span></p>
+                <div id="business-image-container" style="display: none;">
+                    <p><strong>Imagen del negocio:</strong></p>
+                    <img id="business-image" class="business-image" alt="Imagen del negocio">
+                </div>
+            </div>
+            
+            <div class="approval-buttons">
+                <button id="approve-btn" class="btn btn-approve">✅ Aprobar Negocio</button>
+                <button id="reject-btn" class="btn btn-reject">❌ Rechazar</button>
+                <a href="index.html" class="btn btn-secondary">🏠 Volver al Inicio</a>
+            </div>
+        </div>
+        
+        <div id="result" style="display: none;"></div>
+    </div>
+
+    <script>
+        // Obtener parámetros de la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const approvalId = urlParams.get('id');
+        const approvalToken = urlParams.get('token');
+        
+        // Verificar que tenemos los parámetros necesarios
+        if (!approvalId || !approvalToken) {
+            showError('Parámetros de aprobación inválidos');
+            return;
+        }
+        
+        // Simular verificación del token (en producción esto sería más seguro)
+        function verifyToken(id, token) {
+            const timestamp = Date.now();
+            const secret = 'paiporta_approval_2024';
+            const data = `${id}_${timestamp}_${secret}`;
+            
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                const char = data.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash;
+            }
+            const expectedToken = Math.abs(hash).toString(36);
+            
+            return token === expectedToken;
+        }
+        
+        // Mostrar error
+        function showError(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `
+                <div class="status error">
+                    <strong>❌ Error:</strong> ${message}
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="index.html" class="btn btn-secondary">🏠 Volver al Inicio</a>
+                </div>
+            `;
+        }
+        
+        // Mostrar éxito
+        function showSuccess(message) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('result').style.display = 'block';
+            document.getElementById('result').innerHTML = `
+                <div class="status success">
+                    <strong>✅ Éxito:</strong> ${message}
+                </div>
+                <div style="text-align: center; margin-top: 1rem;">
+                    <a href="index.html" class="btn btn-secondary">🏠 Volver al Inicio</a>
+                </div>
+            `;
+        }
+        
+        // Cargar datos del negocio desde localStorage
+        function loadBusinessData() {
+            const businessData = localStorage.getItem(`business_${approvalId}`);
+            if (!businessData) {
+                showError('No se encontraron los datos del negocio');
+                return;
+            }
+            
+            try {
+                const business = JSON.parse(businessData);
+                displayBusinessInfo(business);
+            } catch (error) {
+                showError('Error al cargar los datos del negocio');
+            }
+        }
+        
+        // Mostrar información del negocio
+        function displayBusinessInfo(business) {
+            document.getElementById('business-name').textContent = business.nombre;
+            document.getElementById('business-type').textContent = business.tipo;
+            document.getElementById('business-address').textContent = business.direccion;
+            document.getElementById('business-phone').textContent = business.telefono;
+            document.getElementById('business-hours').textContent = business.horario;
+            document.getElementById('business-description').textContent = business.descripcion;
+            document.getElementById('business-reopen-date').textContent = business.fechaReapertura;
+            document.getElementById('business-coordinates').textContent = `${business.lat}, ${business.lng}`;
+            
+            if (business.imagen) {
+                document.getElementById('business-image').src = business.imagen;
+                document.getElementById('business-image-container').style.display = 'block';
+            }
+            
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('business-details').style.display = 'block';
+        }
+        
+        // Aprobar negocio
+        async function approveBusiness() {
+            const businessData = localStorage.getItem(`business_${approvalId}`);
+            if (!businessData) {
+                showError('No se encontraron los datos del negocio');
+                return;
+            }
+            
+            try {
+                const business = JSON.parse(businessData);
+                
+                // Llamar a la API para aprobar el negocio
+                const response = await fetch('/api/approve-business', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: approvalId,
+                        token: approvalToken,
+                        action: 'approve',
+                        business: business
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Limpiar datos temporales
+                    localStorage.removeItem(`business_${approvalId}`);
+                    showSuccess('El negocio ha sido aprobado y agregado al directorio. Se enviará un correo de confirmación.');
+                } else {
+                    throw new Error(result.error || 'Error desconocido');
+                }
+                
+            } catch (error) {
+                showError('Error al aprobar el negocio: ' + error.message);
+            }
+        }
+        
+        // Rechazar negocio
+        async function rejectBusiness() {
+            try {
+                // Llamar a la API para rechazar el negocio
+                const response = await fetch('/api/approve-business', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        id: approvalId,
+                        token: approvalToken,
+                        action: 'reject'
+                    })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Error en la respuesta del servidor');
+                }
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    // Limpiar datos temporales
+                    localStorage.removeItem(`business_${approvalId}`);
+                    showSuccess('El negocio ha sido rechazado. Se enviará un correo de notificación.');
+                } else {
+                    throw new Error(result.error || 'Error desconocido');
+                }
+                
+            } catch (error) {
+                showError('Error al rechazar el negocio: ' + error.message);
+            }
+        }
+        
+        // Inicializar página
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!verifyToken(approvalId, approvalToken)) {
+                showError('Token de aprobación inválido');
+                return;
+            }
+            
+            loadBusinessData();
+            
+            // Configurar botones
+            document.getElementById('approve-btn').addEventListener('click', approveBusiness);
+            document.getElementById('reject-btn').addEventListener('click', rejectBusiness);
+        });
+    </script>
+</body>
+</html> 

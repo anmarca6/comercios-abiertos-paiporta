@@ -1147,6 +1147,22 @@
             }
         }
 
+        // Generar token de aprobación
+        function generateApprovalToken(businessId) {
+            const timestamp = Date.now();
+            const secret = 'paiporta_approval_2024';
+            const data = `${businessId}_${timestamp}_${secret}`;
+            
+            // Crear un hash simple (en producción usarías una función más segura)
+            let hash = 0;
+            for (let i = 0; i < data.length; i++) {
+                const char = data.charCodeAt(i);
+                hash = ((hash << 5) - hash) + char;
+                hash = hash & hash; // Convertir a entero de 32 bits
+            }
+            return Math.abs(hash).toString(36);
+        }
+
         // Enviar correo electrónico usando EmailJS
         // NOTA: El destinatario debe estar configurado en el dashboard de EmailJS
         // en la plantilla template_l48xcbh con el email: anmarca6@gmail.com
@@ -1203,7 +1219,10 @@
                 message: `Nuevo negocio registrado: ${businessData.nombre || ''}`,
                 timestamp: new Date().toLocaleString('es-ES'),
                 has_image: businessData.imagen ? 'Sí' : 'No',
-                has_image_boolean: !!businessData.imagen
+                has_image_boolean: !!businessData.imagen,
+                business_image: businessData.imagen || '',
+                approval_id: businessData.id,
+                approval_token: generateApprovalToken(businessData.id)
             };
 
             console.log('Template params:', templateParams);
@@ -1286,6 +1305,9 @@
                     imagen: imageData,
                     timestamp: new Date().toISOString()
                 };
+
+                // Guardar datos temporalmente para aprobación
+                localStorage.setItem(`business_${businessData.id}`, JSON.stringify(businessData));
 
                 console.log('Datos del negocio preparados:', businessData);
 
