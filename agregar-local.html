@@ -827,6 +827,8 @@
             updateCoordinatesDisplay();
             document.getElementById('confirmLocationBtn').disabled = false;
             updateMapStatus('warning', '📍 Marcador colocado. Haz clic en "Confirmar ubicación" para guardar.');
+            // Validar formulario en tiempo real después de colocar marcador
+            validateFormRealTime();
 
             // Evento de arrastre del marcador
             marker.on('dragend', function(e) {
@@ -1055,6 +1057,13 @@
                 errors.push('Debes especificar la dirección');
             }
             
+            // Validar coordenadas (obligatorias)
+            const lat = document.getElementById('businessLat').value.trim();
+            const lng = document.getElementById('businessLng').value.trim();
+            if (!lat || !lng || !selectedCoordinates || !selectedCoordinates.lat || !selectedCoordinates.lng) {
+                errors.push('Debes seleccionar las coordenadas del local en el mapa');
+            }
+            
             return errors;
         }
 
@@ -1071,6 +1080,11 @@
             const fechaReapertura = document.getElementById('businessReopenDate').value;
             const direccion = document.getElementById('businessAddress').value.trim();
             
+            // Validar coordenadas (obligatorias)
+            const lat = document.getElementById('businessLat').value.trim();
+            const lng = document.getElementById('businessLng').value.trim();
+            const coordenadasValidas = lat && lng && selectedCoordinates && selectedCoordinates.lat && selectedCoordinates.lng;
+            
             // Verificar que todos los campos estén completos
             const isFormValid = 
                 nombre.length >= 3 &&
@@ -1079,7 +1093,8 @@
                 telefono.length === 9 &&
                 horario.length > 0 &&
                 fechaReapertura !== '' &&
-                direccion.length > 0;
+                direccion.length > 0 &&
+                coordenadasValidas;
             
             // Habilitar/deshabilitar botón
             if (submitBtn) {
@@ -1497,6 +1512,8 @@
                         confirmBtn.addEventListener('click', function() {
                             updateMapStatus('success', '✅ Ubicación confirmada y guardada.');
                             this.disabled = true;
+                            // Validar formulario en tiempo real después de confirmar coordenadas
+                            validateFormRealTime();
                         });
                     }
                 } else {
