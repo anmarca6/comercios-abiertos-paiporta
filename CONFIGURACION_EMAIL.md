@@ -73,19 +73,19 @@
                 <strong>🗺️ Coordenadas:</strong> {{business_coordinates}}
             </div>
             
-            <!-- Imagen del negocio -->
-            {{#if business_image}}
-            <div class="field">
-                <strong>📸 Imagen del negocio:</strong>
-                <div style="margin-top: 10px;">
-                    <img src="{{business_image}}" alt="Imagen del negocio" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e5e7eb;">
-                </div>
+                    <!-- Imagen del negocio -->
+        {{#if business_image}}
+        <div class="field">
+            <strong>📸 Imagen del negocio:</strong>
+            <div style="margin-top: 10px;">
+                <img src="{{business_image}}" alt="Imagen del negocio" style="max-width: 100%; height: auto; border-radius: 8px; border: 1px solid #e5e7eb;">
             </div>
-            {{else}}
-            <div class="field">
-                <strong>📸 Imagen incluida:</strong> No se ha proporcionado imagen
-            </div>
-            {{/if}}
+        </div>
+        {{else}}
+        <div class="field">
+            <strong>📸 Imagen incluida:</strong> {{has_image}}
+        </div>
+        {{/if}}
             
             <!-- Enlaces de aprobación -->
             <div class="field" style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; border-left: 4px solid #3b82f6;">

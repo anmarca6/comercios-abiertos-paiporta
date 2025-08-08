@@ -1163,6 +1163,47 @@
             return Math.abs(hash).toString(36);
         }
 
+        // Función para comprimir imagen
+        function compressImage(file, maxWidth = 800, quality = 0.7) {
+            return new Promise((resolve) => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                const img = new Image();
+                
+                img.onload = function() {
+                    // Calcular nuevas dimensiones manteniendo proporción
+                    let { width, height } = img;
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    // Dibujar imagen comprimida
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Convertir a base64 con calidad reducida
+                    const compressedDataUrl = canvas.toDataURL('image/jpeg', quality);
+                    resolve(compressedDataUrl);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            });
+        }
+
+        // Función para verificar tamaño de imagen
+        function isImageTooLarge(dataUrl) {
+            // Calcular tamaño aproximado en bytes
+            const base64Length = dataUrl.length;
+            const sizeInBytes = Math.ceil((base64Length * 3) / 4);
+            const sizeInMB = sizeInBytes / (1024 * 1024);
+            
+            console.log(`Tamaño de imagen: ${sizeInMB.toFixed(2)} MB`);
+            return sizeInMB > 0.5; // Límite más conservador de 0.5MB para EmailJS
+        }
+
         // Enviar correo electrónico usando EmailJS
         // NOTA: El destinatario debe estar configurado en el dashboard de EmailJS
         // en la plantilla template_l48xcbh con el email: anmarca6@gmail.com
@@ -1282,13 +1323,20 @@
                 let imageData = null;
                 
                 if (imageFile && imageFile.size > 0) {
-                    imageData = await new Promise((resolve) => {
-                        const reader = new FileReader();
-                        reader.onload = function(e) {
-                            resolve(e.target.result);
-                        };
-                        reader.readAsDataURL(imageFile);
-                    });
+                    try {
+                        // Intentar comprimir la imagen para reducir el tamaño
+                        console.log('Procesando imagen...');
+                        imageData = await compressImage(imageFile, 600, 0.6); // Comprimir más agresivamente
+                        
+                        // Verificar si la imagen comprimida sigue siendo demasiado grande
+                        if (isImageTooLarge(imageData)) {
+                            console.log('Imagen sigue siendo demasiado grande después de comprimir, enviando sin imagen');
+                            imageData = null; // No enviar imagen si sigue siendo muy grande
+                        }
+                    } catch (error) {
+                        console.error('Error al procesar imagen:', error);
+                        imageData = null; // No enviar imagen si hay error
+                    }
                 }
 
                 const businessData = {
@@ -1314,6 +1362,7 @@
                 // Intentar enviar correo con EmailJS
                 let emailSent = false;
                 let emailError = null;
+                let retryWithoutImage = false;
                 
                 if (typeof emailjs !== 'undefined') {
                     try {
@@ -1323,7 +1372,33 @@
                         emailSent = true;
                     } catch (error) {
                         console.error('Error al enviar con EmailJS:', error);
-                        emailError = error;
+                        
+                        // Si el error es 413 (payload too large) y hay imagen, intentar sin imagen
+                        if (error.status === 413 && businessData.imagen && !retryWithoutImage) {
+                            console.log('Error 413 detectado, intentando enviar sin imagen...');
+                            retryWithoutImage = true;
+                            
+                            // Crear copia de los datos sin imagen
+                            const businessDataWithoutImage = {
+                                ...businessData,
+                                imagen: null,
+                                has_image: 'No (imagen omitida por tamaño)',
+                                has_image_boolean: false,
+                                business_image: ''
+                            };
+                            
+                            try {
+                                await sendEmail(businessDataWithoutImage);
+                                console.log('Email enviado correctamente sin imagen');
+                                emailSent = true;
+                            } catch (retryError) {
+                                console.error('Error al enviar sin imagen:', retryError);
+                                emailError = retryError;
+                            }
+                        } else {
+                            emailError = error;
+                        }
+                        
                         console.error('Detalles del error:', {
                             name: error.name,
                             message: error.message,

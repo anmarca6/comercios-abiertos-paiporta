@@ -82,5 +82,17 @@
     "fechaReapertura": "2025-03-13",
     "lat": 39.4280867,
     "lng": -0.4148560
+  },
+  {
+    "id": 8,
+    "nombre": "Good to see Barbershop",
+    "tipo": "papeleria",
+    "direccion": " Carrer Sant Joan de Ribera, 11B",
+    "telefono": "+34 633 19 81 89",
+    "descripcion": "Librería y papelería familiar en el corazón de Paiporta, con la ilusión de acercar libros, material escolar y regalos a nuestra comunidad",
+    "horario": "Lunes a viernes, 09:00 am - 20:00 pm",
+    "fechaReapertura": "2025-03-13",
+    "lat": 39.4280867,
+    "lng": -0.4148560
   }
 ] 
